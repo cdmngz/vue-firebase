@@ -1,23 +1,23 @@
 <template>
-  <div>
+  <div class="container">
   <div class="bgimg-1">
     <div class="caption">
-      <span class="border">Metete...</span>
+      <span class="border">Zup Wacho</span>
       </div>
     </div>    
     <div class="bgimg-2">
       <div class="caption">
-      <span class="border" style="background-color:transparent;font-size:25px;color: #f7f7f7;">En...</span>
+      <span class="border" style="background-color:transparent;font-size:25px;color: #f7f7f7;">Qué pasa</span>
       </div>
     </div>
     <div class="bgimg-3">
       <div class="caption">
-      <span class="border" style="background-color:transparent;font-size:25px;color: #f7f7f7;">La página...</span>
+      <span class="border" style="background-color:transparent;font-size:25px;color: #f7f7f7;">El que</span>
       </div>
     </div>
     <div class="bgimg-1">
       <div class="caption">
-      <span class="border">Insecto</span>
+      <span class="border">Lea esto</span>
       </div>
     </div>  
   </div>
@@ -33,11 +33,20 @@ export default {
 }
 </script>
 
-<style scoped>   
+<style scoped>
+    .container {
+      position: absolute;
+      padding: 0;
+      top: 0;
+      left: 0;
+      width: 100vw;
+    }
     .bgimg-1, .bgimg-2, .bgimg-3 {
       position: relative;
       opacity: 0.65;
       width: 100vw;
+      top: 0;
+      left: 0;
       background-attachment: fixed;
       background-position: center;
       background-repeat: no-repeat;
@@ -46,17 +55,17 @@ export default {
     }
     .bgimg-1 {
       background-image: url("../assets/img_parallax.jpg");
-      min-height: 800px;
+      min-height: 100vh;
     }
     
     .bgimg-2 {
       background-image: url("../assets/img_parallax2.jpg");
-      min-height: 400px;
+      min-height: 80vh;
     }
     
     .bgimg-3 {
       background-image: url("../assets/img_parallax3.jpg");
-      min-height: 400px;
+      min-height: 70vh;
     }
     
     .caption {

@@ -2,37 +2,29 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 import { auth, db } from '../main'
 
+console.log('store/index.js')
 Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
-    user: 0,
-    array: [{userid: 1, feel: 10, text: 'Descripción de ejemplo', date: '25/06/2020'}],
-    email: ''
+    user: 'User no vale nada (store/index.js)',
+    array: [],
+    email: '',
   },
   mutations: {
-    llevar(state, userid) {
-      console.log(userid)
-      state.user = userid
-    },
-    async obtenerDatos(state) {
+    obtenerDatos(state) {
       state.array = []
-      try {
-        const snapshot = await db.collection("eventos").where("userid", "==", state.user).get()
-        snapshot.forEach(doc => {
+      db.collection("eventos").where("userid", "==", state.user).orderBy("date").get()
+        .then(querySnapshot => querySnapshot.forEach(doc => {
           state.array.push({
             docid: doc.id,
             userid: doc.data().userid,
             feel: doc.data().feel,
             text: doc.data().text,
-            date: doc.data().date.toDate()})
-        })
-        if(state.array.length===0) {
-          state.array = [{text: 'Aún no tienes registros...'}]
-        }
-      } catch (error) {
-        console.log(error)
-      }
+            date: doc.data().date.toDate()
+          })
+        }))
+        .catch(e => console.log(e.message))
     },
     crearDato(state, objeto) {
       db.collection("eventos").add({
@@ -41,8 +33,7 @@ export default new Vuex.Store({
         text: objeto.text,
         userid: state.user,
       })
-        .then(() => { console.log("Documento creado satisfactoriamente") })
-        .catch(error => { console.error("Error creando el documento: ", error) });
+        .catch(error => { console.error("Error creando el documento: ", error) })
     },
     editarDato(state, item) {
       db.collection("eventos").doc(item.docid).update({
@@ -58,16 +49,20 @@ export default new Vuex.Store({
         .catch(error => { console.error("Error borrando el documento: ", error) });
     },
     observador(state) {
-      auth.onAuthStateChanged(function(user) {
+      console.log('Observador del store/index')
+      auth.onAuthStateChanged(user => {
         if (user) {
+          console.log('Hay sesion')
           state.displayName = user.displayName;
           state.email = user.email;
           state.emailVerified = user.emailVerified;
           state.photoURL = user.photoURL;
           state.isAnonymous = user.isAnonymous;
           state.uid = user.uid;
+          state.user = user.uid;
           state.providerData = user.providerData;
         } else {
+          console.log('No hay sesion')
           state.array = []
           state.displayName = ''
           state.email = ''
@@ -75,7 +70,7 @@ export default new Vuex.Store({
           state.photoURL = ''
           state.isAnonymous = ''
           state.uid = ''
-          state.user = 0
+          state.user = ''
           state.providerData = ''
         }
       })

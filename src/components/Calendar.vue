@@ -1,19 +1,14 @@
 <template>
 <v-content>
-  <v-row class="fill-height">
+  <v-row class="mt-n12 black"><v-btn @click="click" text color="deep-purple accent-5">Obtener</v-btn></v-row>
+  <v-row class="fill-height error">
     <v-col>
       <v-sheet height="64">
-        <v-toolbar flat color="white">
-          <v-btn outlined class="mr-4" color="grey darken-2" @click="setToday">
-            Today
-          </v-btn>
-          <v-btn fab text small color="grey darken-2" @click="prev">
-            <v-icon small>mdi-chevron-left</v-icon>
-          </v-btn>
-          <v-btn fab text small color="grey darken-2" @click="next">
-            <v-icon small>mdi-chevron-right</v-icon>
-          </v-btn>
-          <v-toolbar-title>{{ title }}</v-toolbar-title>
+        <v-toolbar flat color="warning">
+          <v-btn outlined class="mr-4" color="grey darken-2" @click="setToday">Hoy</v-btn>
+          <v-btn fab text small color="grey darken-2" @click="prev"><v-icon small>mdi-chevron-left</v-icon></v-btn>
+          <v-btn fab text small color="grey darken-2" @click="next"><v-icon small>mdi-chevron-right</v-icon></v-btn>
+          <v-toolbar-title>title -> {{ title }}</v-toolbar-title>
           <v-spacer></v-spacer>
           <v-menu bottom right>
             <template v-slot:activator="{ on }">
@@ -106,10 +101,13 @@
 </template>
 
 <script>
+import { mapState, mapMutations, mapActions } from 'vuex'
+
   export default {
     name: 'Calendar',
     data: () => ({
       focus: '',
+      today: '2020-05-27 14:55:20',
       type: 'month',
       typeToLabel: {
         month: 'Month',
@@ -124,7 +122,7 @@
       selectedOpen: false,
       events: [],
       colors: ['blue', 'indigo', 'deep-purple', 'cyan', 'green', 'orange', 'grey darken-1'],
-      names: ['Meeting', 'Holiday', 'PTO', 'Travel', 'Event', 'Birthday', 'Conference', 'Party'],
+      names: ['blue', 'indigo', 'deep-purple', 'cyan', 'green', 'orange', 'grey darken-1'],
     }),
     computed: {
       title () {
@@ -165,6 +163,9 @@
       this.$refs.calendar.checkChange()
     },
     methods: {
+      click() {
+        console.log('click')
+      },
       viewDay ({ date }) {
         this.focus = date
         this.type = 'day'
@@ -205,7 +206,7 @@
         const days = (max.getTime() - min.getTime()) / 86400000
         const eventCount = this.rnd(days, days + 20)
 
-        for (let i = 0; i < eventCount; i++) {
+        for (let i = 0; i < 5; i++) {
           const allDay = this.rnd(0, 3) === 0
           const firstTimestamp = this.rnd(min.getTime(), max.getTime())
           const first = new Date(firstTimestamp - (firstTimestamp % 900000))
@@ -219,10 +220,21 @@
             color: this.colors[this.rnd(0, this.colors.length - 1)],
           })
         }
-
+          events.push({
+            name: 'Eventoglio',
+            start: '2020-05-27 09:00:00',
+            end: '2020-05-27 11:00:00',
+            color: 'indigo'
+          })
+          events.push({
+            name: 'Eventoglio2',
+            start: '2020-05-27 12:00:00',
+            end: '2020-05-27 15:00:00',
+            color: 'orange'
+          })
         this.start = start
         this.end = end
-        this.events = []
+        this.events = events
       },
       nth (d) {
         return d > 3 && d < 21
