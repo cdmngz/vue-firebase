@@ -1,4 +1,4 @@
-# app-calendario2
+# vue-firebase
 
 ## Project setup
 ```
