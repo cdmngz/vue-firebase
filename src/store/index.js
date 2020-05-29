@@ -7,9 +7,22 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
-    user: 'User no vale nada (store/index.js)',
+    user: 'User no vale nada',
     array: [],
-    email: '',
+    activities: [ 
+      { color: 'warning', icon: 'mdi-glass-mug-variant', name: 'Cerveza' },
+      { color: 'light-green accent-4', icon: 'mdi-account-cash', name: 'Recibir Dinero' },
+      { color: 'grey', icon: 'mdi-devices', name: 'Programar' },
+      { color: 'red', icon: 'mdi-weather-lightning', name: 'Suceso Infortunado' },
+      { color: 'green', icon: 'mdi-charity', name: 'Buena Noticia' },
+      { color: 'brown', icon: 'mdi-basketball', name: 'Ejercicio' },
+      { color: 'indigo', icon: 'mdi-music', name: 'Música de la buena' },
+      { color: 'purple', icon: 'mdi-home-heart', name: 'Momento Familiar' },
+      { color: 'teal accent-4', icon: 'mdi-sleep', name: 'Descanso' },
+      { color: 'grey darken-2', icon: 'mdi-smoking', name: 'Fumanding' },
+      { color: 'pink lighten-3', icon: 'mdi-google-circles-extended', name: 'Buena compañía' },
+      { color: 'orange lighten-1', icon: 'mdi-pasta', name: 'Rica comida' },
+    ]
   },
   mutations: {
     obtenerDatos(state) {
@@ -21,6 +34,7 @@ export default new Vuex.Store({
             userid: doc.data().userid,
             feel: doc.data().feel,
             text: doc.data().text,
+            act: doc.data().act,
             date: doc.data().date.toDate()
           })
         }))
@@ -31,6 +45,7 @@ export default new Vuex.Store({
         date: new Date(),
         feel: objeto.feel,
         text: objeto.text,
+        act: objeto.act,
         userid: state.user,
       })
         .catch(error => { console.error("Error creando el documento: ", error) })
@@ -38,7 +53,8 @@ export default new Vuex.Store({
     editarDato(state, item) {
       db.collection("eventos").doc(item.docid).update({
         feel: item.feel,
-        text: item.text
+        text: item.text,
+        act: item.act,
       })
         .then(() => { console.log("Documento editado satisfactoriamente") })
         .catch(error => { console.error("Error editando el documento: ", error) });

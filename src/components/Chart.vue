@@ -45,7 +45,7 @@ export default {
   computed: {
   ...mapState(['array'])
   },
-  mounted() {
+  created() {
     this.obtenerDatos(),
     this.createChart('planet-chart', this.planetChartData)
   },

@@ -1,7 +1,24 @@
 <template>
   <v-content>
-    <v-btn class="ma-2" outlined color="warning"><v-icon left>mdi-glass-mug-variant</v-icon>Cerveza</v-btn>
-    <v-btn class="ma-2" outlined color="indigo"><v-icon left>mdi-account-cash</v-icon>Sueldo</v-btn>
-    <v-btn class="ma-2" outlined color="grey"><v-icon left>mdi-devices</v-icon>Programar</v-btn>
+    <v-btn
+      class="ma-2"
+      :color="item.color"
+      :key="index"
+      outlined
+      v-for="(item, index) in activities"
+    >
+      <v-icon left>{{item.icon}}</v-icon>{{item.name}}
+    </v-btn>
   </v-content>
 </template>
+
+<script>
+import { mapState } from 'vuex'
+
+export default {
+  name: 'Activities',
+  computed: {
+    ...mapState(['activities'])
+  }
+}
+</script>

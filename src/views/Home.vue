@@ -2,22 +2,22 @@
   <div class="container">
   <div class="bgimg-1">
     <div class="caption">
-      <span class="border">Zup Wacho</span>
+      <span class="border">Zup Dude</span>
       </div>
     </div>    
     <div class="bgimg-2">
       <div class="caption">
-      <span class="border" style="background-color:transparent;font-size:25px;color: #f7f7f7;">Qué pasa</span>
+      <span class="border" style="background-color:transparent;font-size:25px;color: #f7f7f7;">Everything Alright?</span>
       </div>
     </div>
     <div class="bgimg-3">
       <div class="caption">
-      <span class="border" style="background-color:transparent;font-size:25px;color: #f7f7f7;">El que</span>
+      <span class="border" style="background-color:transparent;font-size:25px;color: #f7f7f7;">Nice</span>
       </div>
     </div>
     <div class="bgimg-1">
       <div class="caption">
-      <span class="border">Lea esto</span>
+      <span class="border">Take care</span>
       </div>
     </div>  
   </div>
@@ -51,21 +51,18 @@ export default {
       background-position: center;
       background-repeat: no-repeat;
       background-size: cover;
-    
+      min-height: 100vh;    
     }
     .bgimg-1 {
       background-image: url("../assets/img_parallax.jpg");
-      min-height: 100vh;
     }
     
     .bgimg-2 {
       background-image: url("../assets/img_parallax2.jpg");
-      min-height: 80vh;
     }
     
     .bgimg-3 {
       background-image: url("../assets/img_parallax3.jpg");
-      min-height: 70vh;
     }
     
     .caption {

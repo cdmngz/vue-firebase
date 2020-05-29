@@ -3,23 +3,15 @@
   <v-data-table
     class="elevation-1 mt-12"
     :headers="headers"
-    :items="array"
-    sort-by="date"
-    :sort-desc="true"
+    :items="arrayTable"
   >
     <template v-slot:top>
       <v-toolbar flat color="white">
-        <v-toolbar-title>{{user}}</v-toolbar-title>
-        <v-divider
-          class="mx-4"
-          inset
-          vertical
-        ></v-divider>
         <v-spacer></v-spacer>
-        <v-dialog v-model="dialog" max-width="500px">
+        <v-dialog v-model="dialog" max-width="600px">
           <template v-slot:activator="{ on }">
-            <v-btn color="primary" dark class="mx-2" v-on="on">agregar feel</v-btn>
-            <v-btn color="primary" dark class="mx-2" @click="obtenerDatos"></>Obtener</v-btn>
+            <v-btn color="primary" dark class="mx-2" v-on="on">agregar</v-btn>
+            <v-btn color="primary" dark class="mx-2" @click="obtenerDatos">Obtener</v-btn>
           </template>
           <v-card>
             <v-card-title>
@@ -28,15 +20,25 @@
             <v-card-text>
               <v-container>
                 <v-row>
-                  <v-col cols="12" sm="4">
-                    <v-btn class="ma-1" @click="editedItem.feel = n" fab dark small color="success" v-for="n in 10" :key="n">{{n}}</v-btn>
+                  <v-col cols="12" sm="3">
+                    <v-btn class="ma-1" @click="editedItem.feel = n" fab dark small color="success" outlined v-for="n in 10" :key="n">{{n}}</v-btn>
                   </v-col>
-                  <v-col cols="12" sm="8">
-                    <v-row><v-text-field v-model="editedItem.text" @keyup.enter="save" label="Descripción" autofocus></v-text-field></v-row>
+                  <v-col cols="12" sm="9">
                     <v-row>
-                      <v-btn class="mr-2 mb-2" outlined color="warning"><v-icon left>mdi-glass-mug-variant</v-icon>Cerveza</v-btn>
-                      <v-btn class="mr-2 mb-2" outlined color="indigo"><v-icon left>mdi-account-cash</v-icon>Sueldo</v-btn>
-                      <v-btn class="mr-2 mb-2" outlined color="grey"><v-icon left>mdi-devices</v-icon>Programar</v-btn>
+                      <v-text-field v-model="editedItem.text" @keyup.enter="save" label="Descripción" autofocus></v-text-field>
+                    </v-row>
+                    <v-row>
+                        <v-btn
+                          class="mb-2 mr-2"
+                          :color="item.color"
+                          :key="index"
+                          outlined
+                          :value="item.name"
+                          v-for="(item, index) in activities"
+                          @click="editedItem.act = item.name"
+                          >
+                          <v-icon left>{{item.icon}}</v-icon>{{item.name}}
+                        </v-btn>
                     </v-row>
                   </v-col>
                 </v-row>
@@ -81,47 +83,59 @@
     data: () => ({
       dialog: false,
       headers: [
-        {
-          text: 'DocId',
-          align: 'start',
-          sortable: false,
-          value: 'docid',
-        },
-        {
-          text: 'UserId',
-          align: 'start',
-          sortable: false,
-          value: 'userid',
-        },
+        // {
+        //   text: 'UserId',
+        //   align: 'start',
+        //   sortable: false,
+        //   value: 'userid',
+        // },
         { text: 'Feel', value: 'feel' },
         { text: 'Descripción', value: 'text' },
+        { text: 'Act', value: 'act' },
         { text: 'Fecha', value: 'date' },
-        { text: 'Actions', value: 'actions', sortable: false },
+        { text: '', value: 'actions', sortable: false },
       ],
       editedIndex: -1,
       editedItem: {
         userid: '',
         feel: 9,
         text: '',
+        act: '',
         date: ''
       },
       defaultItem: {
         userid: '',
         feel: 9,
         text: '',
+        act: '',
         date: ''
       },
     }),
     computed: {
-      ...mapState(['array', 'email', 'user']),
+      ...mapState(['array', 'activities', 'user']),
       formTitle () {
         return this.editedIndex === -1 ? 'Agregar Feel' : 'Editar Feel'
       },
+      arrayTable() {
+        let temp = this.array
+        temp.forEach((element, index) => {
+          const mes = ('0'+(element.date.getMonth()+1)).slice(-2)
+          const dia = ('0'+element.date.getDate()).slice(-2)
+          const hora = ('0'+element.date.getHours()).slice(-2)
+          const minut = ('0'+element.date.getMinutes()).slice(-2)
+          
+          temp[index].date = `${hora}:${minut} ${dia}/${mes}`
+        });
+        return temp.reverse()
+      }
     },
     watch: {
       dialog (val) {
         val || this.close()
       },
+    },
+    beforeMount() {
+      this.obtenerDatos()
     },
     methods: {
       ...mapMutations(['obtenerDatos', 'crearDato', 'editarDato','eliminarDato']),
@@ -147,6 +161,7 @@
           console.log('editar')
           this.array[this.editedIndex].feel = this.editedItem.feel
           this.array[this.editedIndex].text = this.editedItem.text
+          this.array[this.editedIndex].act = this.editedItem.act
           this.editarDato(this.editedItem)
         } else {
           console.log('crear')
