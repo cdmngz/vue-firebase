@@ -4,14 +4,14 @@
     class="elevation-1 mt-12"
     :headers="headers"
     :items="arrayTable"
+    :sortDesc="true"
   >
     <template v-slot:top>
       <v-toolbar flat color="white">
         <v-spacer></v-spacer>
         <v-dialog v-model="dialog" max-width="600px">
           <template v-slot:activator="{ on }">
-            <v-btn color="primary" dark class="mx-2" v-on="on">agregar</v-btn>
-            <v-btn color="primary" dark class="mx-2" @click="obtenerDatos">Obtener</v-btn>
+            <v-btn color="primary" dark class="mx-2" v-on="on"><v-icon>mdi-plus</v-icon></v-btn>
           </template>
           <v-card>
             <v-card-title>
@@ -70,7 +70,7 @@
       </v-icon>
     </template>
     <template v-slot:no-data>
-      <v-btn color="primary" @click="obtenerDatos">traer datos</v-btn>
+      <v-text-field>Usuario sin registros...</v-text-field>
     </template>
   </v-data-table>
 </v-container>
@@ -78,6 +78,8 @@
 
 <script>
   import { mapMutations, mapState } from 'vuex'
+  import { auth, db } from '../main'
+  
   export default {
     name: 'Feelings',
     data: () => ({
@@ -89,7 +91,7 @@
         //   sortable: false,
         //   value: 'userid',
         // },
-        { text: 'Feel', value: 'feel' },
+        { text: 'Feel', value: 'feel', align: 'center'},
         { text: 'Descripción', value: 'text' },
         { text: 'Act', value: 'act' },
         { text: 'Fecha', value: 'date' },
@@ -97,14 +99,12 @@
       ],
       editedIndex: -1,
       editedItem: {
-        userid: '',
         feel: 9,
         text: '',
         act: '',
         date: ''
       },
       defaultItem: {
-        userid: '',
         feel: 9,
         text: '',
         act: '',
@@ -112,21 +112,21 @@
       },
     }),
     computed: {
-      ...mapState(['array', 'activities', 'user']),
+      ...mapState(['array', 'activities']),
       formTitle () {
         return this.editedIndex === -1 ? 'Agregar Feel' : 'Editar Feel'
       },
       arrayTable() {
-        let temp = this.array
-        temp.forEach((element, index) => {
-          const mes = ('0'+(element.date.getMonth()+1)).slice(-2)
-          const dia = ('0'+element.date.getDate()).slice(-2)
-          const hora = ('0'+element.date.getHours()).slice(-2)
-          const minut = ('0'+element.date.getMinutes()).slice(-2)
-          
-          temp[index].date = `${hora}:${minut} ${dia}/${mes}`
-        });
-        return temp.reverse()
+        let temp = this.array.slice()
+        temp.reverse()
+        // temp.forEach((element, index) => {
+        //   let mes = ('0'+(element.date.getMonth()+1)).slice(-2)
+        //   let dia = ('0'+element.date.getDate()).slice(-2)
+        //   let hora = ('0'+element.date.getHours()).slice(-2)
+        //   let min = ('0'+element.date.getMinutes()).slice(-2)
+        //   temp[index].date = `${hora}:${min} ${dia}/${mes}`
+        // });
+        return temp
       }
     },
     watch: {
@@ -134,11 +134,28 @@
         val || this.close()
       },
     },
-    beforeMount() {
-      this.obtenerDatos()
-    },
     methods: {
-      ...mapMutations(['obtenerDatos', 'crearDato', 'editarDato','eliminarDato']),
+      ...mapMutations(['obtenerDatos', 'editarDato','eliminarDato']),
+      crearDato() {
+        let objeto = Object.assign({}, this.editedItem)
+        console.log(objeto)
+      db.collection("eventos").add({
+        date: new Date(),
+        feel: objeto.feel,
+        text: objeto.text,
+        act: objeto.act,
+        userid: auth.currentUser.uid
+      })
+        .then(res => this.array.push({
+          docid: res.id,
+          date: new Date(),
+          feel: objeto.feel,
+          text: objeto.text,
+          act: objeto.act,
+          userid: auth.currentUser.uid
+        }))
+        .catch(e => console.error("Error creando el documento: ", e.message))
+      },
       editItem (item) {
         this.editedIndex = this.array.indexOf(item)
         this.editedItem = Object.assign({}, item)
@@ -149,7 +166,7 @@
         this.eliminarDato(item)
         this.array.splice(index, 1)
       },
-      close () {
+      close() {
         this.dialog = false
         this.$nextTick(() => {
           this.editedItem = Object.assign({}, this.defaultItem)
@@ -165,11 +182,10 @@
           this.editarDato(this.editedItem)
         } else {
           console.log('crear')
-          this.crearDato(this.editedItem)
-          this.obtenerDatos()
+          this.crearDato()
         }
         this.close()
       },
-    },
+    }
   }
 </script>

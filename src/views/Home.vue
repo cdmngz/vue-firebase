@@ -1,13 +1,96 @@
 <template>
   <div class="container">
-  <div class="bgimg-1">
-    <div class="caption">
-      <span class="border">Zup Dude</span>
-      </div>
+    <div class="bgimg-1">
+      <v-container class="mt-12 ml-12 d-flex">      
+      <v-card class="elevation-2 mt-12 mx-6">
+        <v-toolbar
+          color="primary"
+          dark
+          flat
+        >
+          <v-toolbar-title>Login</v-toolbar-title>
+        </v-toolbar>
+        <v-card-text>
+          <v-form>
+            <v-text-field
+              label="Mail"
+              v-model="logInMail"
+              prepend-icon="mdi-account"
+              type="text"
+            ></v-text-field>
+            <v-text-field
+              id="password"
+              label="Password"
+              v-model="logInPass"
+              prepend-icon="mdi-lock"
+              type="password"
+            ></v-text-field>
+          </v-form>
+        </v-card-text>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn @click="logIn" color="primary">Login</v-btn>
+        </v-card-actions>
+      </v-card>
+      <v-card class="elevation-2 mt-12 mx-6">
+        <v-toolbar
+          color="primary"
+          dark
+          flat
+        >
+          <v-toolbar-title>Crear</v-toolbar-title>
+        </v-toolbar>
+        <v-card-text>
+          <v-form>
+            <v-text-field
+              label="Mail"
+              prepend-icon="mdi-account"
+              v-model="createMail"
+              type="text"
+            ></v-text-field>
+            <v-text-field
+              id="password"
+              label="Password"
+              v-model="createPass"
+              prepend-icon="mdi-lock"
+              type="password"
+            ></v-text-field>
+          </v-form>
+        </v-card-text>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn @click="createUser" color="primary">Crear</v-btn>
+        </v-card-actions>
+      </v-card>
+      <v-card class="elevation-2 mt-12 mx-6">
+        <v-toolbar
+          color="primary"
+          dark
+          flat
+        >
+          <v-toolbar-title>Google</v-toolbar-title>
+        </v-toolbar>
+        <v-card-actions class="d-flex align-center justify-center">
+          <v-btn @click="createUser" color="primary"><v-icon>mdi-google</v-icon></v-btn>
+        </v-card-actions>
+      </v-card>
+      <v-card class="elevation-2 mt-12 mx-6">
+        <v-toolbar
+          color="primary"
+          dark
+          flat
+        >
+          <v-toolbar-title>Facebook</v-toolbar-title>
+        </v-toolbar>
+        <v-card-actions class="d-flex align-center justify-center">
+          <v-btn @click="createUser" color="primary"><v-icon>mdi-facebook</v-icon></v-btn>
+        </v-card-actions>
+      </v-card>
+      </v-container>
     </div>    
     <div class="bgimg-2">
       <div class="caption">
-      <span class="border" style="background-color:transparent;font-size:25px;color: #f7f7f7;">Everything Alright?</span>
+      <span class="border" style="background-color:transparent;font-size:25px;color: #f7f7f7;">Hey, everything Alright?</span>
       </div>
     </div>
     <div class="bgimg-3">
@@ -24,12 +107,32 @@
 </template>
 
 <script>
+import {auth} from '../main'
+import { mapMutations } from 'vuex'
 
 export default {
   name: 'Home',
-  // components: {
-  //   HelloWorld
-  // }
+  data: () => ({
+    logInMail: 'carlos@gmail.com',
+    logInPass: '123456',
+    createMail: 'pau@gmail.com',
+    createPass: '123456',
+  }),
+  methods: {
+    createUser() {
+      auth.createUserWithEmailAndPassword(this.createMail, this.createPass)
+        .then(res => this.$router.push({name: "Dashboard"}))
+        .catch(e => alert(e.message))
+    },
+    logIn() {
+      auth.signInWithEmailAndPassword(this.logInMail, this.logInPass)
+        .then(res => {
+          //Corregir direccionamiento
+          this.$router.go()
+        })
+        .catch(e => alert(e.message))
+    }
+  }
 }
 </script>
 

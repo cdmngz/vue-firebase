@@ -2,7 +2,6 @@
 <v-content>
   <v-row class="mt-n12">
     <v-col>
-      <v-row class="mt-n12"><v-btn @click="obtenerDatos" text >Obtener</v-btn></v-row>
       <v-sheet height="64">
         <v-toolbar flat>
           <v-btn fab text small color="grey darken-2" @click="prev"><v-icon small>mdi-chevron-left</v-icon></v-btn>
@@ -63,7 +62,7 @@
 </template>
 
 <script>
-import { mapState, mapMutations } from 'vuex'
+import { mapState } from 'vuex'
 
   export default {
     name: 'Calendar',
@@ -124,7 +123,6 @@ import { mapState, mapMutations } from 'vuex'
       this.$refs.calendar.checkChange()
     },
     methods: {
-      ...mapMutations(['obtenerDatos']),
       viewDay ({ date }) {
         console.log('viewDay: '+date)
         this.focus = date

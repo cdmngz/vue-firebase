@@ -1,6 +1,5 @@
 <template>
 <div>
-  <v-btn @click="click" text color="deep-purple accent-5">Obtener</v-btn>
   <canvas id="planet-chart"></canvas>
 </div>
 </template>
@@ -46,11 +45,9 @@ export default {
   ...mapState(['array'])
   },
   created() {
-    this.obtenerDatos(),
     this.createChart('planet-chart', this.planetChartData)
   },
   methods: {
-    ...mapMutations(['obtenerDatos']),
     createChart(chartId, chartData) {
       const ctx = document.getElementById(chartId);
       const myChart = new Chart(ctx, {

@@ -1,56 +1,49 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import store from '../store/index'
-
-console.log('router/index.js')
+import firebase from 'firebase'
 
 Vue.use(VueRouter)
 
-console.log('Llamando user desde router/index: '+store.state.user)
-
-let routes = []
-
-if(true) {
-routes = [
+const routes = [
   {
     path: '/',
     name: 'Home',
     component: () => import('../views/Home.vue')
   },
   {
-    path: '/home',
-    name: 'Home2',
-    component: () => import('../views/Home.vue')
-  },
-  {
     path: '/activities',
     name: 'Activities',
-    component: () => import('../views/Activities.vue')
+    component: () => import('../views/Activities.vue'),
+    meta: { requiresAuth: true }
   },
   {
     path: '/dashboard',
     name: 'Dashboard',
-    component: () => import('../views/Dashboard.vue')
+    component: () => import('../views/Dashboard.vue'),
+    meta: { requiresAuth: true }
   },
   {
     path: '/feelings',
     name: 'Feelings',
-    component: () => import('../views/Feelings.vue')
+    component: () => import('../views/Feelings.vue'),
+    meta: { requiresAuth: true }
   },
 ]
-} else {
-  routes = [
-    {
-      path: '*',
-      name: 'Home',
-      component: Home
-    }
-  ]
-}
+
 const router = new VueRouter({
   mode: 'history',
   base: process.env.BASE_URL,
   routes
+})
+
+router.beforeEach((to, from, next) => {
+  const reqAuth = to.matched.some(record => record.meta.requiresAuth)
+  const isAuth = firebase.auth().currentUser
+  if(reqAuth && !isAuth) {
+    next('/')
+  } else {
+    next()
+  }
 })
 
 export default router

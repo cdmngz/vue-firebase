@@ -3,10 +3,7 @@ import App from './App.vue'
 import router from './router'
 import store from './store'
 import vuetify from './plugins/vuetify'
-import firebase from 'firebase/app'
-import 'firebase/auth'
-import 'firebase/firestore'
-import VueTextareaAutoSize from 'vue-textarea-autosize'
+import firebase from 'firebase'
 
 const firebaseConfig = {
   apiKey: "AIzaSyCcnY-S-meSpjuTiaG8DTRno97ri_DlZn4",
@@ -17,7 +14,6 @@ const firebaseConfig = {
   messagingSenderId: "968764308547",
   appId: "1:968764308547:web:9df45f7df08189058b68f6"
 };
-// Initialize Firebase
 firebase.initializeApp(firebaseConfig);
 
 export const auth = firebase.auth();
@@ -25,9 +21,32 @@ export const db = firebase.firestore();
 
 Vue.config.productionTip = false
 
-new Vue({
-  router,
-  store,
-  vuetify,
-  render: h => h(App)
-}).$mount('#app')
+let app = null
+
+firebase.auth().onAuthStateChanged(user => {
+  if(!app) {
+    app = new Vue({
+      router,
+      store,
+      vuetify,
+      render: h => h(App)
+    }).$mount('#app')
+  }
+  if(user) {
+    console.log('Hay usuario desde main'+user.uid)
+    firebase.firestore().collection("eventos").where("userid", "==", user.uid).orderBy("date").get()
+    .then(querySnapshot => querySnapshot.forEach(doc => {
+      store.state.array.push({
+        docid: doc.id,
+        userid: doc.data().userid,
+        feel: doc.data().feel,
+        text: doc.data().text,
+        act: doc.data().act,
+        date: doc.data().date.toDate()
+      })
+    }))
+    .catch(e => console.log(e.message))
+  } else {
+    console.log('No hay usuario desde main')
+  }
+})
