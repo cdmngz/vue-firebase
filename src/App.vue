@@ -6,7 +6,7 @@
       dark
       flat
     >
-      <v-btn text>
+      <v-btn text class="d-flex align-center mx-1">
         <v-img
           class="shrink"
           contain
@@ -16,7 +16,7 @@
           src="@/assets/koala.svg"
           width="50"
         />
-        <span class="ml-3 headline font-weight-medium">koalabe</span>
+        <span class="ml-3 headline font-weight-medium">koala</span>
       </v-btn>
 
       <v-tabs v-if="usuario">
@@ -26,18 +26,15 @@
         <v-tab to="/feelings">Feelings</v-tab>
       </v-tabs>
       <v-spacer></v-spacer>
-      <v-menu bottom left>
+      <v-menu offset-y="true">
         <template v-slot:activator="{ on }">
           <v-btn v-if="usuario" icon v-on="on">
             <v-icon>mdi-dots-vertical</v-icon>
           </v-btn>
         </template>
-        <v-list class="mt-12">
+        <v-list>
           <v-list-item>
-            <v-btn text><span class="mr-2">Perfil</span></v-btn>
-          </v-list-item>
-          <v-list-item>
-            <v-btn text><span class="mr-2">Preferencias</span></v-btn>
+            <v-btn text to="/profile"><span class="mr-2">Perfil</span></v-btn>
           </v-list-item>
           <v-list-item>
             <v-btn text  @click="logOut"><span class="mr-2">logout</span></v-btn>

@@ -1,13 +1,12 @@
 <template>
-<div>
-  <canvas id="planet-chart"></canvas>
-</div>
+  <v-card class="pa-8">
+    <canvas id="planet-chart"></canvas>
+  </v-card>
 </template>
 
 <script>
 import Chart from 'chart.js'
-import { mapState, mapMutations, mapActions } from 'vuex'
-import store from '@/store/index'
+import { mapState } from 'vuex'
 
 export default {
   name: 'Chart',
@@ -22,7 +21,7 @@ export default {
             data: [],
             backgroundColor: [],
             borderColor: [],
-            borderWidth: 3
+            borderWidth: 1
           }
         ],
         options: {
@@ -44,8 +43,8 @@ export default {
   computed: {
   ...mapState(['array'])
   },
-  created() {
-    this.createChart('planet-chart', this.planetChartData)
+  mounted() {
+    this.getDayInfo()
   },
   methods: {
     createChart(chartId, chartData) {
@@ -57,22 +56,23 @@ export default {
         myChart: myChart
       });
     },
-    click() {
-      console.log(store.state.array.length)
+    getDayInfo() {
       let [tempLabels, tempData] = [[],[]]
       this.planetChartData.data.labels = []
       this.planetChartData.data.datasets[0].data = []
       this.planetChartData.data.datasets[0].backgroundColor = [] 
       this.planetChartData.data.datasets[0].borderColor = []
-      let tamanoArreglo = this.array.length-1
+      let tamanoArreglo = (this.array.length)-1
       let actual = `${new Date().getDate()}/${new Date().getMonth()+1}`
       let actualArray = `${this.array[tamanoArreglo].date.getDate()}/${this.array[tamanoArreglo].date.getMonth()+1}`
 
-      while(actual === actualArray) {
+      while(actual === actualArray && tamanoArreglo >= 0) {
         tempLabels.push(this.array[tamanoArreglo].date)     
         tempData.push(this.array[tamanoArreglo].feel)
-        tamanoArreglo-=1   
-        actualArray = `${this.array[tamanoArreglo].date.getDate()}/${this.array[tamanoArreglo].date.getMonth()+1}`
+        tamanoArreglo--
+        if(tamanoArreglo >= 0) {
+          actualArray = `${this.array[tamanoArreglo].date.getDate()}/${this.array[tamanoArreglo].date.getMonth()+1}`
+        }   
       }
 
       for (let i = 0; i <= 23; i++) {
@@ -88,7 +88,7 @@ export default {
         i < 10 ? i = '0'+i : null;
         this.planetChartData.data.labels.push(i)
         this.planetChartData.data.datasets[0].data.push(prom)
-        this.planetChartData.data.datasets[0].backgroundColor.push('rgba(54,73,93,.5)')   
+        this.planetChartData.data.datasets[0].backgroundColor.push('rgba(60,80,220,.1)')   
         this.planetChartData.data.datasets[0].borderColor.push('#36495d') 
       }
       this.createChart('planet-chart', this.planetChartData)

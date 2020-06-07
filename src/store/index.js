@@ -14,12 +14,14 @@ export default new Vuex.Store({
       { color: 'red', icon: 'mdi-weather-lightning', name: 'Suceso Infortunado' },
       { color: 'green', icon: 'mdi-charity', name: 'Buena Nueva' },
       { color: 'brown', icon: 'mdi-basketball', name: 'Ejercicio' },
-      { color: 'indigo', icon: 'mdi-music', name: 'Música de la buena' },
-      { color: 'purple', icon: 'mdi-home-heart', name: 'Momento Familiar' },
+      { color: 'indigo', icon: 'mdi-music', name: 'Nice Music' },
+      { color: 'purple', icon: 'mdi-home-heart', name: 'Familia' },
       { color: 'teal accent-4', icon: 'mdi-sleep', name: 'Descanso' },
       { color: 'grey darken-2', icon: 'mdi-smoking', name: 'Fumanding' },
       { color: 'pink lighten-3', icon: 'mdi-google-circles-extended', name: 'Buena compañía' },
       { color: 'orange lighten-1', icon: 'mdi-pasta', name: 'Rica comida' },
+      { color: 'green lighten-1', icon: 'mdi-check-bold', name: 'Chill' },
+      { color: 'brown', icon: 'mdi-head-flash', name: 'Maquinando' },
     ]
   },
   mutations: {

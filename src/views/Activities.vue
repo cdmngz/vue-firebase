@@ -9,7 +9,6 @@
     >
       <v-icon left>{{item.icon}}</v-icon>{{item.name}}
     </v-btn>
-    <pre style="font-size:12px">{{array}}</pre>
   </v-content>
 </template>
 

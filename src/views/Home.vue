@@ -1,7 +1,8 @@
 <template>
   <div class="container">
     <div class="bgimg-1">
-      <v-container class="mt-12 ml-12 d-flex">      
+      <v-container class="mt-12 d-flex">   
+      <v-spacer></v-spacer>   
       <v-card class="elevation-2 mt-12 mx-6">
         <v-toolbar
           color="primary"
@@ -19,7 +20,6 @@
               type="text"
             ></v-text-field>
             <v-text-field
-              id="password"
               label="Password"
               v-model="logInPass"
               prepend-icon="mdi-lock"
@@ -27,9 +27,16 @@
             ></v-text-field>
           </v-form>
         </v-card-text>
-        <v-card-actions>
-          <v-spacer></v-spacer>
-          <v-btn @click="logIn" color="primary">Login</v-btn>
+        <v-card-actions class="d-flex flex-column">
+          <v-btn @click="logIn" elevation="1" color="primary my-2 px-5">Sign In with Mail</v-btn>
+          <v-hover v-slot:default="{ hover }">
+            <v-img
+              :elevation="hover ? 10 : 2"
+              style="cursor: pointer"
+              @click="logInGoogle"
+              src="@/assets/google_signIn.png">
+            </v-img>
+          </v-hover>
         </v-card-actions>
       </v-card>
       <v-card class="elevation-2 mt-12 mx-6">
@@ -49,7 +56,6 @@
               type="text"
             ></v-text-field>
             <v-text-field
-              id="password"
               label="Password"
               v-model="createPass"
               prepend-icon="mdi-lock"
@@ -60,30 +66,6 @@
         <v-card-actions>
           <v-spacer></v-spacer>
           <v-btn @click="createUser" color="primary">Crear</v-btn>
-        </v-card-actions>
-      </v-card>
-      <v-card class="elevation-2 mt-12 mx-6">
-        <v-toolbar
-          color="primary"
-          dark
-          flat
-        >
-          <v-toolbar-title>Google</v-toolbar-title>
-        </v-toolbar>
-        <v-card-actions class="d-flex align-center justify-center">
-          <v-btn @click="createUser" color="primary"><v-icon>mdi-google</v-icon></v-btn>
-        </v-card-actions>
-      </v-card>
-      <v-card class="elevation-2 mt-12 mx-6">
-        <v-toolbar
-          color="primary"
-          dark
-          flat
-        >
-          <v-toolbar-title>Facebook</v-toolbar-title>
-        </v-toolbar>
-        <v-card-actions class="d-flex align-center justify-center">
-          <v-btn @click="createUser" color="primary"><v-icon>mdi-facebook</v-icon></v-btn>
         </v-card-actions>
       </v-card>
       </v-container>
@@ -107,30 +89,33 @@
 </template>
 
 <script>
-import {auth} from '../main'
+import { auth, google } from '../main'
 import { mapMutations } from 'vuex'
 
 export default {
   name: 'Home',
   data: () => ({
-    logInMail: 'carlos@gmail.com',
-    logInPass: '123456',
-    createMail: 'pau@gmail.com',
-    createPass: '123456',
+    logInMail: '',
+    logInPass: '',
+    createMail: '',
+    createPass: '',
   }),
   methods: {
     createUser() {
       auth.createUserWithEmailAndPassword(this.createMail, this.createPass)
-        .then(res => this.$router.push({name: "Dashboard"}))
+        .then(res => this.$router.go())
         .catch(e => alert(e.message))
     },
     logIn() {
       auth.signInWithEmailAndPassword(this.logInMail, this.logInPass)
-        .then(res => {
-          //Corregir direccionamiento
-          this.$router.go()
-        })
+        .then(res => this.$router.go())
         .catch(e => alert(e.message))
+    },
+    logInGoogle() {
+      const provider = google
+      auth.signInWithPopup(provider)
+        .then(res => this.$router.go())
+        .catch(err => console.log(err.message));
     }
   }
 }
@@ -146,7 +131,7 @@ export default {
     }
     .bgimg-1, .bgimg-2, .bgimg-3 {
       position: relative;
-      opacity: 0.65;
+      opacity: 0.6;
       width: 100vw;
       top: 0;
       left: 0;
