@@ -2,7 +2,8 @@
   <v-app>
     <v-app-bar
       app
-      color="primary"
+      :color="currentRouteName === 'Home' ? 'transparent' : 'primary'"
+      :absolute="currentRouteName === 'Home' ? true : false"
       dark
       flat
     >
@@ -16,7 +17,7 @@
           src="@/assets/koala.svg"
           width="50"
         />
-        <span class="ml-3 headline font-weight-medium">koala</span>
+        <span class="ml-3 headline font-weight-medium">keeped</span>
       </v-btn>
 
       <v-tabs v-if="usuario">
@@ -26,7 +27,7 @@
         <v-tab to="/feelings">Feelings</v-tab>
       </v-tabs>
       <v-spacer></v-spacer>
-      <v-menu offset-y="true">
+      <v-menu :offset-y="true">
         <template v-slot:activator="{ on }">
           <v-btn v-if="usuario" icon v-on="on">
             <v-icon>mdi-dots-vertical</v-icon>
@@ -61,6 +62,9 @@ export default {
       } else {
         return null
       }
+    },
+    currentRouteName() {
+      return this.$route.name
     }
   },
   methods: {
