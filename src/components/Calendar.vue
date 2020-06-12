@@ -1,6 +1,5 @@
 <template>
   <v-card class="pa-8">
-
     <v-sheet height="64">
       <v-toolbar flat>
         <v-btn fab text small color="grey darken-2" @click="prev"><v-icon small>mdi-chevron-left</v-icon></v-btn>
@@ -52,6 +51,9 @@ import { mapState } from 'vuex'
     }),
     computed: {
       ...mapState(['array']),
+      arrayTamano() {
+        return this.array.length
+      },
       title () {
         const { start, end } = this
         if (!start || !end) {
@@ -76,6 +78,11 @@ import { mapState } from 'vuex'
           timeZone: 'UTC', month: 'long',
         })
       },
+    },
+    watch: {
+      arrayTamano() {
+        this.$refs.calendar.checkChange()
+      }
     },
     mounted () {
       this.$refs.calendar.checkChange()
@@ -110,7 +117,6 @@ import { mapState } from 'vuex'
               let max = Math.max(...nuevoArray)
               let min = Math.min(...nuevoArray)
               this.events.push({name: ' ↑ '+max.toString(), color: 'green', start: `2020-${mesAnterior}-${diaAnterior}`, end: `2020-${mesAnterior}-${diaAnterior}`})
-              this.events.push({name: ' ↕ '+min.toString(), color: 'primary', start: `2020-${mesAnterior}-${diaAnterior}`, end: `2020-${mesAnterior}-${diaAnterior}`})
               this.events.push({name: ' ↓ '+min.toString(), color: 'red', start: `2020-${mesAnterior}-${diaAnterior}`, end: `2020-${mesAnterior}-${diaAnterior}`})
               nuevoArray = []
               nuevoArray.push(element.feel) 

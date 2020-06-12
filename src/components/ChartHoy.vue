@@ -1,6 +1,6 @@
 <template>
   <v-card class="pa-8">
-    <canvas id="planet-chart"></canvas>
+    <canvas id="feels-chart-hoy"></canvas>
   </v-card>
 </template>
 
@@ -9,14 +9,14 @@ import Chart from 'chart.js'
 import { mapState } from 'vuex'
 
 export default {
-  name: 'Chart',
+  name: 'Charthoy',
   data: () => ({
-    planetChartData: {
+    feelChartData: {
       type: 'line',
       data: {
         labels: [],
         datasets: [
-          { // one line graph
+          {
             label: 'Hoy',
             data: [],
             backgroundColor: [],
@@ -41,10 +41,18 @@ export default {
     }
   }),
   computed: {
-  ...mapState(['array'])
+    ...mapState(['array']),
+    arrayTamano() {
+      return this.array.length
+    }
+  },
+  watch: {
+    arrayTamano() {
+      this.getDayInfo()
+    }
   },
   mounted() {
-    this.getDayInfo()
+      this.getDayInfo()
   },
   methods: {
     createChart(chartId, chartData) {
@@ -58,10 +66,10 @@ export default {
     },
     getDayInfo() {
       let [tempLabels, tempData] = [[],[]]
-      this.planetChartData.data.labels = []
-      this.planetChartData.data.datasets[0].data = []
-      this.planetChartData.data.datasets[0].backgroundColor = [] 
-      this.planetChartData.data.datasets[0].borderColor = []
+      this.feelChartData.data.labels = []
+      this.feelChartData.data.datasets[0].data = []
+      this.feelChartData.data.datasets[0].backgroundColor = [] 
+      this.feelChartData.data.datasets[0].borderColor = []
       let tamanoArreglo = (this.array.length)-1
       let actual = `${new Date().getDate()}/${new Date().getMonth()+1}`
       let actualArray = `${this.array[tamanoArreglo].date.getDate()}/${this.array[tamanoArreglo].date.getMonth()+1}`
@@ -86,12 +94,12 @@ export default {
         }
         cont != 0 ? prom = parseInt(sum/cont, 10) : null;
         i < 10 ? i = '0'+i : null;
-        this.planetChartData.data.labels.push(i)
-        this.planetChartData.data.datasets[0].data.push(prom)
-        this.planetChartData.data.datasets[0].backgroundColor.push('rgba(60,80,220,.1)')   
-        this.planetChartData.data.datasets[0].borderColor.push('#36495d') 
+        this.feelChartData.data.labels.push(i)
+        this.feelChartData.data.datasets[0].data.push(prom)
+        this.feelChartData.data.datasets[0].backgroundColor.push('rgba(60,80,220,.1)')   
+        this.feelChartData.data.datasets[0].borderColor.push('#36495d') 
       }
-      this.createChart('planet-chart', this.planetChartData)
+      this.createChart('feels-chart-hoy', this.feelChartData)
     }
   }
 }

@@ -138,7 +138,6 @@
       ...mapMutations(['obtenerDatos', 'editarDato','eliminarDato']),
       crearDato() {
         let objeto = Object.assign({}, this.editedItem)
-        console.log(objeto)
       db.collection("eventos").add({
         date: new Date(),
         feel: objeto.feel,
@@ -154,7 +153,7 @@
           act: objeto.act,
           userid: auth.currentUser.uid
         }))
-        .catch(e => console.error("Error creando el documento: ", e.message))
+        .catch(e => console.log("Error creando el feel: ", e.message))
       },
       editItem (item) {
         this.editedIndex = this.array.indexOf(item)

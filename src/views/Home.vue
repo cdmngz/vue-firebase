@@ -2,23 +2,30 @@
   <div class="container">
     <div class="section-1">
       <aside>
-        <div class="login">
-          <h2 id="title">Iniciar Sesión con</h2>
-          <button class="btn-facebook mx-4 my-12">
+        <div class="signIn">
+          <h2>{{ voltearValue === true ? 'Iniciar Sesión' : 'Crear Usuario'}}</h2>
+          <button
+            @click="signInFacebook"
+            class="btn-facebook mx-4 my-12"
+          >
             <v-icon style="color: white; transform: translateY(-1px); margin-right: 9px;">mdi-facebook</v-icon>
-            Facebook</button>
-          <button class="btn-google mx-4 my-12">
+            Facebook
+          </button>
+          <button
+            @click="signInGoogle"
+            class="btn-google mx-4 my-12"
+          >
             <img src="@/assets/icon-google.png" style="height: 20px; transform: translateY(4px); margin-right: 9px;">
             Google
           </button>
-          <input type="email" placeholder="Email">
+          <input type="email" placeholder="Email" v-model="mail">
           <br>
-          <input type="password" placeholder="Password">
-          <div class='voltear'>
-            <button class="voltear1 primary" onClick="alert('ger')">Iniciar Sesión</button>
-            <button class="voltear2 primary" onClick="alert('gol')">Registrar</button>
+          <input type="password" placeholder="Password" v-model="password">
+          <div :class="voltearValue === true ? 'voltear' : 'voltear voltearToggle'">
+            <button class="voltear1 primary" @click="signIn">Iniciar Sesión</button>
+            <button class="voltear2 primary" @click="signUp">Registrar</button>
           </div>
-          <a onClick="registrarView(event)">No eres miembro? Regístrate</a>
+          <a @click="voltearValue = !voltearValue" v-html="voltearText"></a>
         </div>
       </aside>
     </div>
@@ -44,30 +51,44 @@
 </template>
 
 <script>
-import { auth, google } from '../main'
+import { auth, google, facebook } from '../main'
 import { mapMutations } from 'vuex'
 
 export default {
   name: 'Home',
   data: () => ({
-    logInMail: '',
-    logInPass: '',
-    createMail: '',
-    createPass: '',
+    mail: 'invitado@gmail.com',
+    password: '123456',
+    voltearValue: true
   }),
+  computed: {
+    voltearText() {
+      if(this.voltearValue===true) {
+        return `No eres miembro? <u>Regístrate</u>`
+      } else {
+        return `Vuelve para <u>Iniciar Sesión</u>`
+      }
+    }
+  },
   methods: {
-    createUser() {
-      auth.createUserWithEmailAndPassword(this.createMail, this.createPass)
+    signUp() {
+      auth.createUserWithEmailAndPassword(this.mail, this.password)
         .then(res => this.$router.go())
         .catch(e => alert(e.message))
     },
-    logIn() {
-      auth.signInWithEmailAndPassword(this.logInMail, this.logInPass)
+    signIn() {
+      auth.signInWithEmailAndPassword(this.mail, this.password)
         .then(res => this.$router.go())
         .catch(e => alert(e.message))
     },
-    logInGoogle() {
+    signInGoogle() {
       const provider = google
+      auth.signInWithPopup(provider)
+        .then(res => this.$router.go())
+        .catch(err => console.log(err.message));
+    },
+    signInFacebook() {
+      const provider = facebook
       auth.signInWithPopup(provider)
         .then(res => this.$router.go())
         .catch(err => console.log(err.message));
@@ -109,7 +130,7 @@ export default {
     justify-content: flex-end;
     align-items: center;
   }
-  .login {
+  .signIn {
     background-color: rgba(255, 255, 255, 1);
     margin-right: 10vw;
     width: 35vw;
@@ -117,22 +138,22 @@ export default {
     border-radius: 10px;
     text-align: center;
   }
-  .login button {
+  .signIn button {
     padding: 1vw 1.5vw;
     font-size: 18px;
     border-radius: 10px;
     box-shadow: 0 1px 5px 0px rgba(0, 0, 0, 0.3);
     outline: none;
   }
-  .login .btn-facebook {
+  .signIn .btn-facebook {
     background-color: #3b5998;
     color: white;
   }
-  .login .btn-google {
+  .signIn .btn-google {
     background-color: white;
     color: #555555;
   }
-  .login input {
+  .signIn input {
     color: #333333;
     line-height: 1.2;
     font-size: 18px;
@@ -144,7 +165,7 @@ export default {
     padding: 20px;
     border: 1px solid rgb(195, 195, 195);
   }
-  .login input:focus {
+  .signIn input:focus {
     border: 1px solid #00d9ff;
     outline: none;
   }
@@ -162,17 +183,10 @@ export default {
     color: white;
     width: 100%;
   }
-  .voltear1 {
-    transform-style: preserve-3d;
-  }
-  .voltear2 {
-    position: absolute;
-    transform-style: preserve-3d;
+  .voltear2, .voltearToggle {
     transform: rotateY(180deg);
   }
-  .voltearToggle {
-    transform: rotateY(180deg);
-  }
+  
   .caption {
     position: absolute;
     left: 0;
@@ -190,20 +204,3 @@ export default {
   }
     
 </style>
-
-<script>
-  let toggleValue = true
-  registrarView = (event) => {
-    console.log(event)
-      document.querySelector('.voltear').classList.toggle("voltearToggle")
-    if(toggleValue) {
-      document.getElementById('title').innerText = ('Registrar con')
-      event.target.innerHTML = 'Volver para Iniciar Sesión'
-      toggleValue = false
-    } else {
-      document.getElementById('title').innerText = ('Iniciar Sesión con')
-      event.target.innerHTML = 'No eres miembro? Regístrate'
-      toggleValue = true
-    }
-  }
-</script>

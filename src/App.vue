@@ -5,7 +5,7 @@
       :color="currentRouteName === 'Home' ? 'transparent' : 'primary'"
       :absolute="currentRouteName === 'Home' ? true : false"
       dark
-      flat
+      :flat="currentRouteName === 'Home' ? true : false"
     >
       <v-btn text class="d-flex align-center mx-1">
         <v-img
@@ -78,7 +78,6 @@ export default {
       // This will render a fake reCAPTCHA as appVerificationDisabledForTesting is true.
       // This will resolve after rendering without app verification.
       var appVerifier = new auth.RecaptchaVerifier('recaptcha-container');
-      console.log(appVerifier)
       // signInWithPhoneNumber will call appVerifier.verify() which will resolve with a fake
       // reCAPTCHA response.
       auth.signInWithPhoneNumber(phoneNumber, appVerifier)
