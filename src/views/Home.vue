@@ -30,7 +30,7 @@
       </aside>
     </div>
     <div>
-      <h1 style="padding: 45vh 0">Veaamos</h1>  
+      <h1 style="padding: 45vh 0; text-align: center">Probando</h1>  
     </div>    
     <div class="section-2">
       <div class="caption">
@@ -42,11 +42,14 @@
       <span class="border" style="background-color:transparent;font-size:25px;color: #f7f7f7;">Nice</span>
       </div>
     </div>
-    <div class="section-1">
-      <div class="caption">
-      <span class="border">Take care</span>
-      </div>
-    </div>  
+    <v-footer width="100vw" padless class="primary">
+      <v-col
+        class="text-center"
+        cols="12"
+      >
+        {{ new Date().getFullYear() }} — <strong>Keeped</strong>
+      </v-col>
+    </v-footer>
   </div>
 </template>
 
@@ -132,15 +135,16 @@ export default {
   }
   .signIn {
     background-color: rgba(255, 255, 255, 1);
-    margin-right: 10vw;
-    width: 35vw;
-    padding: 2vw 4vw;
     border-radius: 10px;
+    height: calc(20em + 20vw);
+    margin-right: 10vw;
+    padding: 2vw 4vw;
     text-align: center;
+    width: calc(16em + 16vw);
   }
   .signIn button {
     padding: 1vw 1.5vw;
-    font-size: 18px;
+    font-size: calc(0.6em + 0.6vw);
     border-radius: 10px;
     box-shadow: 0 1px 5px 0px rgba(0, 0, 0, 0.3);
     outline: none;
@@ -202,5 +206,4 @@ export default {
     font-size: 25px;
     letter-spacing: 10px;
   }
-    
 </style>

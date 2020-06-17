@@ -21,7 +21,7 @@
               <v-container>
                 <v-row>
                   <v-col cols="12" sm="3">
-                    <v-btn class="ma-1" @click="editedItem.feel = n" fab dark small color="success" outlined v-for="n in 10" :key="n">{{n}}</v-btn>
+                    <v-btn class="ma-1" @click="editedItem.feel = n" fab dark small color="success" outlined active-class v-for="n in 10" :key="n">{{n}}</v-btn>
                   </v-col>
                   <v-col cols="12" sm="9">
                     <v-row>

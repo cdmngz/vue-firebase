@@ -35,7 +35,6 @@ firebase.auth().onAuthStateChanged(user => {
     }).$mount('#app')
   }
   if(user) {
-    console.log('Hay usuario desde main'+user.uid)
     firebase.firestore().collection("eventos").where("userid", "==", user.uid).orderBy("date").get()
     .then(querySnapshot => querySnapshot.forEach(doc => {
       store.state.array.push({
@@ -49,6 +48,6 @@ firebase.auth().onAuthStateChanged(user => {
     }))
     .catch(e => console.log(e.message))
   } else {
-    console.log('No hay usuario desde main')
+    console.log('No hay usuario')
   }
 })
