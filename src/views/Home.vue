@@ -1,50 +1,109 @@
 <template>
-  <div class="contalo">
-    <div class="section-1">
-      <aside>
-        <div class="signIn">
-          <h2>{{ voltearValue === true ? 'Iniciar Sesión' : 'Crear Usuario'}}</h2>
-          <button
-            @click="signInFacebook"
-            class="btn-facebook mx-4 my-12"
-          >
-            <v-icon style="color: white; transform: translateY(-1px); margin-right: 9px;">mdi-facebook</v-icon>
-            Facebook
-          </button>
-          <button
-            @click="signInGoogle"
-            class="btn-google mx-4 my-12"
-          >
-            <img src="@/assets/icon-google.png" style="height: 20px; transform: translateY(4px); margin-right: 9px;">
-            Google
-          </button>
-          <input type="email" placeholder="Email" v-model="mail">
-          <br>
-          <input type="password" placeholder="Password" v-model="password">
-          
-          <div :class="voltearValue === true ? 'voltear' : 'voltear voltearToggle'">
-            <button class="voltear1 error" @click="signIn">Iniciar Sesión</button>
-            <button class="voltear2 primary" @click="signUp">Registrar</button>
+  <div class="containerPrincipal">
+    <div class="section-1">  
+      <aside></aside>
+      <v-row class="pt-12">
+        <v-col xs="12" sm="5" md="5" class="ma-md-12">
+          <div class="custom-heading">
+            <h1>Track your emotions</h1>
+            <h4 style="opacity: .4">Get patterns</h4>
           </div>
+        </v-col>
+        <v-col xs="12" sm="7" md="5" class="mx-md-12">
+          <v-stepper v-model="e1" class="d-flex flex-column ma-sm-12 pa-md-6">
+            <v-stepper-items>
+              <v-stepper-content step="1" class="text-center">
+                <h2>Iniciar Sesión</h2>
+                <v-row class="my-6">
+                  <v-col xs="12" md="6" class="text-center">
+                    <v-btn @click="signInFacebook" dark color="#3b5998" class="pa-6">
+                      <v-icon class="mx-2">mdi-facebook</v-icon>Facebook
+                    </v-btn>
+                  </v-col>
+                  <v-col xs="12" md="6" class="text-center">
+                    <v-btn @click="signInGoogle" class="white pa-6">
+                      <v-img src="@/assets/btn_google_light_normal_ios.svg"></v-img>Google
+                    </v-btn>
+                  </v-col>
+                </v-row>
+                <v-text-field
+                  color="blue"
+                  filled
+                  outlined
+                  placeholder="Email"
+                  prepend-inner-icon="mdi-account"
+                  :success="mail.length > 8"
+                  v-model="mail"
+                ></v-text-field>
+                <v-text-field
+                  :append-icon="eyeIcon ? 'mdi-eye' : 'mdi-eye-off'"
+                  color="blue"
+                  @click:append="eyeIcon = !eyeIcon"
+                  filled
+                  outlined
+                  placeholder="Password"
+                  prepend-inner-icon="mdi-lock"
+                  :success="password.length > 4"
+                  :type="eyeIcon ? 'text' : 'password'"
+                  v-model="password"
+                ></v-text-field>
+                <v-btn class="orange darken-4 pa-6 my-2" dark @click="signIn">Iniciar Sesión</v-btn>
+              </v-stepper-content>
 
-          <a @click="voltearValue = !voltearValue" v-html="voltearText"></a>
-        </div>
-      </aside>
+              <v-stepper-content step="2">
+                <v-text-field
+                  class="my-8"
+                  color="blue"
+                  filled
+                  outlined
+                  placeholder="Email"
+                  prepend-inner-icon="mdi-account"
+                  :success="mail.length > 8"
+                  v-model="mail"
+                ></v-text-field>
+                <v-btn class="orange darken-4 pa-6 mt-n5 mb-6" dark @click="e1 = 3">Siguiente</v-btn>
+              </v-stepper-content>
+
+              <v-stepper-content step="3">
+                <v-text-field
+                  :append-icon="eyeIcon ? 'mdi-eye' : 'mdi-eye-off'"
+                  class="my-8"
+                  color="blue"
+                  @click:append="eyeIcon = !eyeIcon"
+                  filled
+                  outlined
+                  placeholder="Password"
+                  prepend-inner-icon="mdi-lock"
+                  :success="password.length > 4"
+                  :type="eyeIcon ? 'text' : 'password'"
+                  v-model="password"
+                ></v-text-field>
+                <v-btn class="orange darken-4 pa-6 mt-n5 mb-6" dark @click="signUp">Registrar</v-btn>
+              </v-stepper-content>
+            </v-stepper-items>
+            <a class="text-center" @click="e1===1 ? [e1++, mail='', password=''] : e1=1" v-html="voltearText"></a>
+          </v-stepper>
+        </v-col>
+      </v-row>
     </div>
+
     <div>
       <div style="padding: 45vh 0; margin: 0; text-align: center">emmmmmmm</div>  
-    </div>    
+    </div>  
+
     <div class="section-2">
       <div class="caption">
       <span class="border" style="background-color:transparent;font-size:25px;color: #f7f7f7;">Hey, everything Alright?</span>
       </div>
     </div>
+
     <div class="section-3">
       <div class="caption">
       <span class="border" style="background-color:transparent;font-size:25px;color: #f7f7f7;">Nice</span>
       </div>
     </div>
-    <v-footer width="100vw" padless class="primary">
+
+    <v-footer width="100vw" height="100" padless class="primary">
       <v-col
         class="text-center"
         cols="12"
@@ -62,13 +121,14 @@ import { mapMutations } from 'vuex'
 export default {
   name: 'Home',
   data: () => ({
+    e1: 1,
+    eyeIcon: false,
     mail: 'invitado@gmail.com',
     password: '123456',
-    voltearValue: true
   }),
   computed: {
     voltearText() {
-      if(this.voltearValue===true) {
+      if(this.e1===1) {
         return `No eres miembro? <u>Regístrate</u>`
       } else {
         return `Vuelve para <u>Iniciar Sesión</u>`
@@ -78,15 +138,15 @@ export default {
   methods: {
     signUp() {
       console.log('signup')
-      // auth.createUserWithEmailAndPassword(this.mail, this.password)
-      //   .then(res => this.$router.go())
-      //   .catch(e => alert(e.message))
+      auth.createUserWithEmailAndPassword(this.mail, this.password)
+        .then(res => this.$router.go())
+        .catch(e => alert(e.message))
     },
     signIn() {
       console.log('signin')
-      // auth.signInWithEmailAndPassword(this.mail, this.password)
-      //   .then(res => this.$router.go())
-      //   .catch(e => alert(e.message))
+      auth.signInWithEmailAndPassword(this.mail, this.password)
+        .then(res => this.$router.go())
+        .catch(e => alert(e.message))
     },
     signInGoogle() {
       const provider = google
@@ -105,7 +165,7 @@ export default {
 </script>
 
 <style scoped>
-  .contalo {
+  .containerPrincipal {
     position: absolute;
     padding: 0;
     top: 0;
@@ -130,73 +190,18 @@ export default {
 
   .section-1 aside {
     background-color: rgba(0,0,0,0.2);
-    width: 100%;
-    height: 100vh;
     clip-path: polygon(50% 0, 100% 0%, 100% 100%, 35% 100%);
-    display: flex;
-    justify-content: flex-end;
-    align-items: center;
-    overflow: visible;
-  }
-  .signIn {
-    background-color: rgba(255, 255, 255, 1);
-    border-radius: 10px;
-    height: calc(20em + 20vw);
-    margin-right: 10vw;
-    padding: 2vw 4vw;
-    text-align: center;
-    width: calc(16em + 16vw);
-  }
-  .signIn button {
-    padding: 1vw 1.5vw;
-    font-size: calc(0.6em + 0.6vw);
-    border-radius: 10px;
-    box-shadow: 0 1px 5px 0px rgba(0, 0, 0, 0.3);
-    outline: none;
-  }
-  .signIn .btn-facebook {
-    background-color: #3b5998;
-    color: white;
-  }
-  .signIn .btn-google {
-    background-color: white;
-    color: #555555;
-  }
-  .signIn input {
-    color: #333333;
-    line-height: 1.2;
-    font-size: 18px;
-    display: block;
-    width: 100%;
-    border-radius: 5px;
-    background: #eee;
-    height: 60px;
-    padding: 20px;
-    border: 1px solid rgb(195, 195, 195);
-  }
-  .signIn input:focus {
-    border: 1px solid #00d9ff;
-    outline: none;
-  }
-  .voltear {
-    transform-style: preserve-3d;
-    transition: .8s;
-    position: relative;
-    display: flex;
-    justify-content: center;
-    margin: 10% 0 30% 0;
-  }
-  .voltear1, .voltear2 {
-    background-color: #234;
+    height: 100%;
     position: absolute;
-    color: white;
     width: 100%;
-    z-index: 1;
   }
-  .voltear2, .voltearToggle {
-    transform: rotateY(180deg);
+  .custom-heading {
+    color: white;
+    font-size: calc(2em + 2vw) !important;
+    line-height: 2em;
+    margin: calc(.3em + .3vw) 0 0 calc(.5em + .8vw);
+    position: relative;
   }
-  
   .caption {
     position: absolute;
     left: 0;
