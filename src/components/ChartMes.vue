@@ -1,5 +1,5 @@
 <template>
-  <v-card id="ini" class="pa-4 text-center">
+  <v-card class="pa-4 text-center">
     <canvas id="feels-chart-mes"></canvas>
   </v-card>
 </template>
@@ -18,6 +18,8 @@ export default {
           label: 'Este Mes',
           data: [],
           backgroundColor: [],
+          borderColor: [],
+          borderWidth: 1
         }],
         labels: [],
       }
@@ -49,11 +51,11 @@ export default {
     },
     getMonthActivities() {
       if(this.array.length > 0) {
-        console.log('hay datos')
 
-        let actividades = []
-        let nArray = this.array.length-1
         const actualMonth = new Date().getMonth()
+        let actividades = []
+        let colores = ['#F0F8FF', '#F0F8FF', '#F0F8FF','#F0F8FF','#F0F8FF','#F0F8FF','#F0F8FF','#F0F8FF','#F0F8FF']
+        let nArray = this.array.length-1
 
         while(nArray >= 0 && actualMonth === this.array[nArray].date.getMonth()) {
           actividades.push(this.array[nArray].act)
@@ -69,22 +71,31 @@ export default {
           for(let itemGroupBy in groupByAct) {
             for(let itemState of this.activities) {
               if(itemState.name === itemGroupBy) {
+                const color = this.getRandomColor()
                 this.feelChartData.data.labels.push(itemGroupBy)
                 this.feelChartData.data.datasets[0].data.push(groupByAct[itemGroupBy])
-                this.feelChartData.data.datasets[0].backgroundColor.push(itemState.color)
+                this.feelChartData.data.datasets[0].backgroundColor.push(color+'80')
+                this.feelChartData.data.datasets[0].borderColor.push(color)
               }
             }
           }
           this.createChart('feels-chart-mes', this.feelChartData)
         } else {
-          console.log('no hay de este mes')
-          document.querySelector('#ini').innerHTML = `Aún no hay datos este mes, pero si de anteriores`
+          console.log('No hay de este mes')
         }
       } else {
-        console.log('distinto')
-        document.querySelector('#ini').innerHTML = `Aún no hay datos este mes`
+        console.log('No hay ningún registro')
       }
-    }
+    },
+    getRandomColor() {
+      const letters = 'BCDEF'.split('')
+      let color = '#'
+
+      for (let i = 0; i < 6; i++ ) {
+        color += letters[Math.floor(Math.random() * letters.length)];
+      }
+      return color;
+  }
   }
 }
 </script>

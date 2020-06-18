@@ -5,6 +5,7 @@
     :headers="headers"
     :items="arrayTable"
     :sortDesc="true"
+    no-results-text="tomatelaa"
   >
     <template v-slot:top>
       <v-toolbar flat color="white">
@@ -70,7 +71,7 @@
       </v-icon>
     </template>
     <template v-slot:no-data>
-      <v-text-field>Usuario sin registros...</v-text-field>
+      <div>Aún no hay datos...</div>
     </template>
   </v-data-table>
 </v-container>
@@ -117,16 +118,19 @@
         return this.editedIndex === -1 ? 'Agregar Feel' : 'Editar Feel'
       },
       arrayTable() {
-        let temp = this.array.slice()
-        temp.reverse()
+        if(this.array.length > 0) {
+
+          let temp = this.array.slice(0)
+          temp.reverse()
         // temp.forEach((element, index) => {
-        //   let mes = ('0'+(element.date.getMonth()+1)).slice(-2)
+          //   let mes = ('0'+(element.date.getMonth()+1)).slice(-2)
         //   let dia = ('0'+element.date.getDate()).slice(-2)
         //   let hora = ('0'+element.date.getHours()).slice(-2)
         //   let min = ('0'+element.date.getMinutes()).slice(-2)
         //   temp[index].date = `${hora}:${min} ${dia}/${mes}`
         // });
-        return temp
+          return temp
+        }
       }
     },
     watch: {

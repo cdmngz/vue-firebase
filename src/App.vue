@@ -68,35 +68,6 @@ export default {
     }
   },
   methods: {
-    logInPhoneNumber() {
-      // Turn off phone auth app verification.
-      auth.settings.appVerificationDisabledForTesting = true;
-
-      var phoneNumber = "+34634226190";
-      var testVerificationCode = "987654";
-
-      // This will render a fake reCAPTCHA as appVerificationDisabledForTesting is true.
-      // This will resolve after rendering without app verification.
-      var appVerifier = new auth.RecaptchaVerifier('recaptcha-container');
-      // signInWithPhoneNumber will call appVerifier.verify() which will resolve with a fake
-      // reCAPTCHA response.
-      auth.signInWithPhoneNumber(phoneNumber, appVerifier)
-        .then(function (confirmationResult) {
-        // confirmationResult can resolve with the whitelisted testVerificationCode above.
-        return confirmationResult.confirm(testVerificationCode)
-      }).catch(function (error) {
-        // Error; SMS not sent
-        // ...
-      });
-    },
-    logInGmail() {
-      console.log(this.email, this.password)
-      auth.signInWithEmailAndPassword(this.email, this.password)
-        .then(res => {
-          this.$router.replace({name: "Dashboard"})
-        })
-        .catch(err => console.log(err))
-    },
     logOut() {
       auth.signOut()
         .then(() => {

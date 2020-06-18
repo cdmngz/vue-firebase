@@ -28,6 +28,12 @@ const routes = [
     component: () => import('../views/Feelings.vue'),
     meta: { requiresAuth: true }
   },
+  {
+    path: '/profile',
+    name: 'Profile',
+    component: () => import('../views/Profile.vue'),
+    meta: { requiresAuth: true }
+  },
 ]
 
 const router = new VueRouter({

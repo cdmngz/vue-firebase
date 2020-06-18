@@ -1,5 +1,5 @@
 <template>
-  <div class="container">
+  <div class="contalo">
     <div class="section-1">
       <aside>
         <div class="signIn">
@@ -21,16 +21,18 @@
           <input type="email" placeholder="Email" v-model="mail">
           <br>
           <input type="password" placeholder="Password" v-model="password">
+          
           <div :class="voltearValue === true ? 'voltear' : 'voltear voltearToggle'">
-            <button class="voltear1 primary" @click="signIn">Iniciar Sesión</button>
+            <button class="voltear1 error" @click="signIn">Iniciar Sesión</button>
             <button class="voltear2 primary" @click="signUp">Registrar</button>
           </div>
+
           <a @click="voltearValue = !voltearValue" v-html="voltearText"></a>
         </div>
       </aside>
     </div>
     <div>
-      <h1 style="padding: 45vh 0; text-align: center">Probando</h1>  
+      <div style="padding: 45vh 0; margin: 0; text-align: center">emmmmmmm</div>  
     </div>    
     <div class="section-2">
       <div class="caption">
@@ -75,14 +77,16 @@ export default {
   },
   methods: {
     signUp() {
-      auth.createUserWithEmailAndPassword(this.mail, this.password)
-        .then(res => this.$router.go())
-        .catch(e => alert(e.message))
+      console.log('signup')
+      // auth.createUserWithEmailAndPassword(this.mail, this.password)
+      //   .then(res => this.$router.go())
+      //   .catch(e => alert(e.message))
     },
     signIn() {
-      auth.signInWithEmailAndPassword(this.mail, this.password)
-        .then(res => this.$router.go())
-        .catch(e => alert(e.message))
+      console.log('signin')
+      // auth.signInWithEmailAndPassword(this.mail, this.password)
+      //   .then(res => this.$router.go())
+      //   .catch(e => alert(e.message))
     },
     signInGoogle() {
       const provider = google
@@ -101,7 +105,7 @@ export default {
 </script>
 
 <style scoped>
-  .container {
+  .contalo {
     position: absolute;
     padding: 0;
     top: 0;
@@ -132,6 +136,7 @@ export default {
     display: flex;
     justify-content: flex-end;
     align-items: center;
+    overflow: visible;
   }
   .signIn {
     background-color: rgba(255, 255, 255, 1);
@@ -182,10 +187,11 @@ export default {
     margin: 10% 0 30% 0;
   }
   .voltear1, .voltear2 {
-    background-color: #234 !important;
+    background-color: #234;
     position: absolute;
     color: white;
     width: 100%;
+    z-index: 1;
   }
   .voltear2, .voltearToggle {
     transform: rotateY(180deg);
