@@ -49,7 +49,6 @@
                 ></v-text-field>
                 <v-btn class="orange darken-4 pa-6 my-2" dark @click="signIn">Iniciar Sesión</v-btn>
               </v-stepper-content>
-
               <v-stepper-content step="2">
                 <v-text-field
                   class="my-8"
@@ -61,9 +60,14 @@
                   :success="mail.length > 8"
                   v-model="mail"
                 ></v-text-field>
-                <v-btn class="orange darken-4 pa-6 mt-n5 mb-6" dark @click="e1 = 3">Siguiente</v-btn>
+                <v-btn
+                  class="orange darken-4 pa-6 mt-n5 mb-6"
+                  @click="mail!=='' ? e1 = 3 : mail = ''"
+                  dark
+                >
+                  Siguiente
+                </v-btn>
               </v-stepper-content>
-
               <v-stepper-content step="3">
                 <v-text-field
                   :append-icon="eyeIcon ? 'mdi-eye' : 'mdi-eye-off'"
@@ -88,12 +92,34 @@
     </div>
 
     <div>
-      <div style="padding: 45vh 0; margin: 0; text-align: center">emmmmmmm</div>  
-    </div>  
+      <v-row>
+        <v-col>
+          <v-img src="@/assets/cactus.gif"></v-img>
+        </v-col>
+        <v-col class="d-flex align-center">
+          <div class="custom-heading primary--text">
+            <h2>Are you</h2>
+            <h2>having a</h2>
+            <h2>rough day?</h2>
+          </div>
+        </v-col>
+      </v-row>
+    </div>
+
+    <v-row class="videoSection">
+      <video autoplay src="@/assets/video.mp4" loop></video>
+        <v-col></v-col>
+        <v-col>
+          <div class="custom-heading white--text my-md-12 py-md-12 ml-12">
+            <h1 style="opacity: .6">Just</h1>
+            <h1 style="opacity: .6">breath</h1>
+          </div>
+        </v-col>
+    </v-row>
 
     <div class="section-2">
       <div class="caption">
-      <span class="border" style="background-color:transparent;font-size:25px;color: #f7f7f7;">Hey, everything Alright?</span>
+      <span class="border" style="background-color:transparent;font-size:25px;color: #f7f7f7;">Everything gonna be alraight</span>
       </div>
     </div>
 
@@ -103,7 +129,7 @@
       </div>
     </div>
 
-    <v-footer width="100vw" height="100" padless class="primary">
+    <v-footer width="100vw" height="200" padless dark class="primary">
       <v-col
         class="text-center"
         cols="12"
@@ -116,7 +142,6 @@
 
 <script>
 import { auth, google, facebook } from '../main'
-import { mapMutations } from 'vuex'
 
 export default {
   name: 'Home',
@@ -128,11 +153,7 @@ export default {
   }),
   computed: {
     voltearText() {
-      if(this.e1===1) {
-        return `No eres miembro? <u>Regístrate</u>`
-      } else {
-        return `Vuelve para <u>Iniciar Sesión</u>`
-      }
+      return this.e1===1 ? `No eres miembro? <u>Regístrate</u>` : `Vuelve para <u>Iniciar Sesión</u>`
     }
   },
   methods: {
@@ -165,6 +186,15 @@ export default {
 </script>
 
 <style scoped>
+  .videoSection {
+    position: relative;
+    height: 100vh;
+  }
+  video {
+    position: absolute;
+    width: 100%;
+    min-height: 100vh;
+  }
   .containerPrincipal {
     position: absolute;
     padding: 0;
