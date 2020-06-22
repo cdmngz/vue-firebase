@@ -100,16 +100,16 @@
           <div class="custom-heading primary--text">
             <h2>Are you</h2>
             <h2>having a</h2>
-            <h2>rough day?</h2>
+            <h2>tough day?</h2>
           </div>
         </v-col>
       </v-row>
     </div>
 
     <v-row class="videoSection">
-      <video autoplay src="@/assets/video.mp4" loop></video>
+      <video src="@/assets/video.mp4" loop autoplay></video>
         <v-col></v-col>
-        <v-col>
+        <v-col class="d-flex align-center">
           <div class="custom-heading white--text my-md-12 py-md-12 ml-12">
             <h1 style="opacity: .6">Just</h1>
             <h1 style="opacity: .6">breath</h1>
@@ -122,14 +122,51 @@
       <span class="border" style="background-color:transparent;font-size:25px;color: #f7f7f7;">Everything gonna be alraight</span>
       </div>
     </div>
-
+    
     <div class="section-3">
-      <div class="caption">
-      <span class="border" style="background-color:transparent;font-size:25px;color: #f7f7f7;">Nice</span>
-      </div>
+      <v-timeline class="my-7">
+
+        <v-timeline-item
+          v-for="(item, index) in eventos"
+          :key="index"
+          :color="item.color"
+          small
+        >
+          <template v-slot:opposite>
+            <span
+              :class="`headline font-weight-bold ${item.color}--text`"
+              v-text="item.time"
+            ></span>
+          </template>
+        <v-lazy :options="{ threshold: 1.0 }" transition="slide-y-transition" hide-on-leave v-model="isActive">
+          <div :class="index%2===0 ? 'd-flex flex-column' : 'd-flex flex-column align-end'">
+            <h2 :class="`headline font-weight-light mb-4 ${item.color}--text`">{{item.title}}</h2>
+            <p style="text-align: justify; width: 30vw; color: #666">{{item.text}}</p>
+          </div>
+        </v-lazy>
+        </v-timeline-item>
+      </v-timeline>
     </div>
 
-    <v-footer width="100vw" height="200" padless dark class="primary">
+    <v-divider class="mx-16 my-16"></v-divider>
+
+    <div>
+      <v-row class="my-16">
+          <v-col v-for="(item, index) in ultimoCards" :key="index" class="d-flex justify-space-around">
+            <v-lazy :options="{ threshold: 1.0 }">
+              <v-card class="text-center" width="300" flat>
+                <v-avatar class="my-4 rounded-circle" height="150" width="150">
+                    <img :src="item.img">
+                </v-avatar>
+                <v-card-title class="justify-center">{{item.title}}</v-card-title>
+                <v-card-text>{{item.text}}</v-card-text>
+              </v-card>
+            </v-lazy>
+        </v-col>
+      </v-row>
+    </div>
+
+    <v-footer width="100vw" height="200" padless dark class="dark">
       <v-col
         class="text-center"
         cols="12"
@@ -146,10 +183,56 @@ import { auth, google, facebook } from '../main'
 export default {
   name: 'Home',
   data: () => ({
+    isActive: false,
     e1: 1,
     eyeIcon: false,
     mail: 'invitado@gmail.com',
     password: '123456',
+    ultimoCards: [
+      {
+        img: require('@/assets/pug.gif'),
+        title: 'People',
+        text: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam.'
+      },
+      {
+        img: require('@/assets/giphy.webp'),
+        title: 'Loves',
+        text: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam.'
+      },
+      {
+        img: require('@/assets/like.gif'),
+        title: '3 items',
+        text: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam.'
+      }
+    ],
+    eventos: [
+      { 
+        color: 'cyan',
+        time: 'CoVid-19',
+        title: 'Planteamiento del Proyecto',
+        text: 'Una vez decretado el estado de alarma, con una fuerte paralización en el sistema productivo mundial, comienza la incertidumbre a generar angustia, por lo cual llevar un control de las emociones a medida que el tiempo avanza, serviría para notar algún patrón inusual incluso antes que suceda.'
+      },
+      { color: 'green',
+        time: 'Abril',
+        title: 'Desarrollo del Proyecto',
+        text: 'El estado de alarma avanzó, llevando el encierro a un punto determinante. Muchas conductas son afectadas y llegan a ocurrir sube y bajas emocionales fuertes. Comienza el desarrollo de una CRUD para llevar un control de las emociones en estas circunstancias.'
+      },
+      { color: 'pink',
+        time: 'Mayo',
+        title: 'Último mes frío',
+        text: 'El desarrollo inicial se lleva a cabo con MongoAtlas y el hosting en GitHub, para mudar todo por completo a los servidores de Google con su servicio de Firebase, donde contamos con hosting, auth, base de datos y storage.'
+      },
+      { color: 'amber',
+        time: 'Junio',
+        title: 'Llega el Verano',
+        text: `Muchas personas haciendo ejercicio, una ciudad reactivada. Días con noches más cortas. Se van sumando una serie de gráficos para complementar lo atractivo en la app, y se desarrolla un borrador para Android.`
+      },
+      // { color: 'orange',
+      //   time: 'CoVid-19',
+      //   title: 'Inicio de Cuarentena',
+      //   text: '....................'
+      // },
+      ],
   }),
   computed: {
     voltearText() {
@@ -216,7 +299,6 @@ export default {
   }
   .section-1 { background-image: url("../assets/img_parallax.jpg"); }
   .section-2 { background-image: url("../assets/img_parallax2.jpg"); }
-  .section-3 { background-image: url("../assets/img_parallax3.jpg"); }
 
   .section-1 aside {
     background-color: rgba(0,0,0,0.2);
@@ -229,7 +311,6 @@ export default {
     color: white;
     font-size: calc(2em + 2vw) !important;
     line-height: 2em;
-    margin: calc(.3em + .3vw) 0 0 calc(.5em + .8vw);
     position: relative;
   }
   .caption {
