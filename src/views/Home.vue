@@ -90,7 +90,7 @@
         </v-col>
       </v-row>
     </div>
-
+    <!-- Segundo bloque -->
     <div>
       <v-row>
         <v-col>
@@ -105,58 +105,67 @@
         </v-col>
       </v-row>
     </div>
-
+    <!-- Video Bloque -->
     <v-row class="videoSection">
-      <video src="@/assets/video.mp4" loop autoplay></video>
-        <v-col></v-col>
+      <video ref="videoRef" src="" muted loop></video>
+        <v-col>
+        </v-col>
         <v-col class="d-flex align-center">
           <div class="custom-heading white--text my-md-12 py-md-12 ml-12">
-            <h1 style="opacity: .6">Just</h1>
-            <h1 style="opacity: .6">breath</h1>
+            <v-lazy transition="first-fade">
+              <h1>Just</h1>
+            </v-lazy>
+            <v-lazy transition="second-fade">
+              <h1>breathe</h1>
+            </v-lazy>
           </div>
         </v-col>
     </v-row>
-
+    <!-- Chill Out -->
     <div class="section-2">
       <div class="caption">
       <span class="border" style="background-color:transparent;font-size:25px;color: #f7f7f7;">Everything gonna be alraight</span>
       </div>
     </div>
-    
+    <!-- Timeline -->
     <div class="section-3">
       <v-timeline class="my-7">
-
         <v-timeline-item
           v-for="(item, index) in eventos"
           :key="index"
           :color="item.color"
           small
         >
+          <v-lazy :options="{ threshold: 1.0 }" transition="vertical-fade">
           <template v-slot:opposite>
             <span
               :class="`headline font-weight-bold ${item.color}--text`"
               v-text="item.time"
             ></span>
           </template>
-        <v-lazy :options="{ threshold: 1.0 }" transition="slide-y-transition" hide-on-leave v-model="isActive">
-          <div :class="index%2===0 ? 'd-flex flex-column' : 'd-flex flex-column align-end'">
-            <h2 :class="`headline font-weight-light mb-4 ${item.color}--text`">{{item.title}}</h2>
-            <p style="text-align: justify; width: 30vw; color: #666">{{item.text}}</p>
-          </div>
-        </v-lazy>
+            <div :class="index%2===0 ? 'd-flex flex-column' : 'd-flex flex-column align-end'">
+              <h2 :class="`headline font-weight-light mb-4 ${item.color}--text`">{{item.title}}</h2>
+              <p style="text-align: justify; width: 30vw; color: #666">{{item.text}}</p>
+            </div>
+          </v-lazy>
         </v-timeline-item>
       </v-timeline>
     </div>
 
     <v-divider class="mx-16 my-16"></v-divider>
-
+    
+    <!-- Cards -->
     <div>
-      <v-row class="my-16">
-          <v-col v-for="(item, index) in ultimoCards" :key="index" class="d-flex justify-space-around">
-            <v-lazy :options="{ threshold: 1.0 }">
+      <v-row class="mb-16">
+          <v-col
+            class="d-flex justify-space-around"
+            :key="index"
+            v-for="(item, index) in ultimoCards"
+            >
+            <v-lazy :options="{ threshold: 1.0 }" transition="vertical-fade">
               <v-card class="text-center" width="300" flat>
                 <v-avatar class="my-4 rounded-circle" height="150" width="150">
-                    <img :src="item.img">
+                  <img :src="item.img">
                 </v-avatar>
                 <v-card-title class="justify-center">{{item.title}}</v-card-title>
                 <v-card-text>{{item.text}}</v-card-text>
@@ -166,7 +175,7 @@
       </v-row>
     </div>
 
-    <v-footer width="100vw" height="200" padless dark class="dark">
+    <v-footer width="100vw" height="200" padless dark>
       <v-col
         class="text-center"
         cols="12"
@@ -179,6 +188,9 @@
 
 <script>
 import { auth, google, facebook } from '../main'
+import { createSimpleTransition } from 'vuetify/lib/components/transitions/createTransition'
+
+createSimpleTransition('vertical-fade')
 
 export default {
   name: 'Home',
@@ -209,16 +221,16 @@ export default {
       { 
         color: 'cyan',
         time: 'CoVid-19',
-        title: 'Planteamiento del Proyecto',
+        title: 'Planeamiento del Proyecto',
         text: 'Una vez decretado el estado de alarma, con una fuerte paralización en el sistema productivo mundial, comienza la incertidumbre a generar angustia, por lo cual llevar un control de las emociones a medida que el tiempo avanza, serviría para notar algún patrón inusual incluso antes que suceda.'
       },
       { color: 'green',
-        time: 'Abril',
+        time: "Abril '20",
         title: 'Desarrollo del Proyecto',
         text: 'El estado de alarma avanzó, llevando el encierro a un punto determinante. Muchas conductas son afectadas y llegan a ocurrir sube y bajas emocionales fuertes. Comienza el desarrollo de una CRUD para llevar un control de las emociones en estas circunstancias.'
       },
       { color: 'pink',
-        time: 'Mayo',
+        time: "Mayo '20",
         title: 'Último mes frío',
         text: 'El desarrollo inicial se lleva a cabo con MongoAtlas y el hosting en GitHub, para mudar todo por completo a los servidores de Google con su servicio de Firebase, donde contamos con hosting, auth, base de datos y storage.'
       },
@@ -239,15 +251,16 @@ export default {
       return this.e1===1 ? `No eres miembro? <u>Regístrate</u>` : `Vuelve para <u>Iniciar Sesión</u>`
     }
   },
+  mounted() {
+    this.vamos()
+  },
   methods: {
     signUp() {
-      console.log('signup')
       auth.createUserWithEmailAndPassword(this.mail, this.password)
         .then(res => this.$router.go())
         .catch(e => alert(e.message))
     },
     signIn() {
-      console.log('signin')
       auth.signInWithEmailAndPassword(this.mail, this.password)
         .then(res => this.$router.go())
         .catch(e => alert(e.message))
@@ -263,17 +276,43 @@ export default {
       auth.signInWithPopup(provider)
         .then(res => this.$router.go())
         .catch(err => console.log(err.message));
+    },
+    vamos() {
+      this.$refs.videoRef.src = require('@/assets/video.mp4');
+      this.$refs.videoRef.play();
     }
   }
 }
 </script>
 
 <style scoped>
+  .first-fade-enter-active {
+    transition: all 20s .1s ease;
+  }
+  .first-fade-enter {
+    transform: translateY(30px);
+    opacity: 0
+  }
+  .second-fade-enter-active {
+    transition: all 20s 4s ease;
+    opacity: .6;
+  }
+  .second-fade-enter {
+    transform: translateY(30px);
+    opacity: 0;
+  }
+  .vertical-fade-enter-active {
+    transition: all 1s .3s ease;
+  }
+  .vertical-fade-enter {
+    transform: translateY(30px);
+    opacity: 0;
+  }
   .videoSection {
     position: relative;
     height: 100vh;
   }
-  video {
+  .videoSection video {
     position: absolute;
     width: 100%;
     min-height: 100vh;

@@ -36,7 +36,9 @@
         </v-row>
       </v-container>
     </v-card>
-    <v-card v-if="subirBajar===0"><v-card-text>Debes ingresar datos en la pestaña <v-btn to="/feelings" text depressed>Feelings</v-btn></v-card-text></v-card>
+    <v-card v-if="subirBajar===0">
+      <v-card-text>Debes ingresar datos en la pestaña <v-btn to="/feelings" text depressed>Feelings</v-btn></v-card-text>
+    </v-card>
   </v-card>
 </template>
 
@@ -71,6 +73,7 @@ export default {
           element.date.getDate() == tres ? temp3.push({ feel: element.feel, date: element.date, text: element.text, act: element.act}) : null;
           element.date.getDate() == ultimoItemArray.date.getDate() ? temp4.push({ feel: element.feel, date: element.date, text: element.text, act: element.act}) : null;
         })
+
         if(temp1.length > 0 && temp2.length > 0 && temp3.length > 0) {
           final.push(this.rellenaArreglo(temp1), this.rellenaArreglo(temp2), this.rellenaArreglo(temp3))
         } else {
@@ -95,19 +98,18 @@ export default {
       arreglo.forEach(element => {
         element.feel > valorMax.feel ? valorMax = element : null;
         element.feel <= valorMin.feel ? valorMin = element : null;
-        actividades.includes(element.act) ? null : actividades.push(element.act);
+        actividades.includes(element.act) ? null : element.act!==undefined ? actividades.push(element.act) : null;
         sum += element.feel
       })
       //Obtiene promedio
       sum = sum/arreglo.length
-      
       //Obtiene el formato de botones de activities
       actividades.forEach((element, index) => {
         this.activities.forEach(element2 => {
           element2.name === element ? actividades[index] = element2 : null;
         })
       })
-
+            
       return {
         maxHour: valorMax.date,
         maxFeel: valorMax.feel,
