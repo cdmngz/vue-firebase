@@ -10,33 +10,52 @@
     <template v-slot:top>
       <v-toolbar flat color="white">
         <v-spacer></v-spacer>
-        <v-dialog v-model="dialog" max-width="600px">
+        <v-dialog v-model="dialog" max-width="620px">
           <template v-slot:activator="{ on }">
             <v-btn color="primary" dark class="mx-2" v-on="on"><v-icon>mdi-plus</v-icon></v-btn>
           </template>
           <v-card>
             <v-card-title>
-              <span class="headline">{{ formTitle }}<v-icon>mdi-menu-right</v-icon>{{editedItem.feel}}</span>
+              <span class="headline">{{ formTitle }}</span>
             </v-card-title>
             <v-card-text>
               <v-container>
                 <v-row>
                   <v-col cols="12" sm="3">
-                    <v-btn class="ma-1" @click="editedItem.feel = n" fab dark small color="success" outlined active-class v-for="n in 10" :key="n">{{n}}</v-btn>
+                    <v-btn
+                      class="ma-2"
+                      :color="editedItem.feel > 6 ? 'success' : editedItem.feel > 2 ? 'warning' : 'error'"
+                      @click="editedItem.feel = n"
+                      dark
+                      fab
+                      :key="n"
+                      :outlined="editedItem.feel===n ? false : true"
+                      depressed
+                      small
+                      v-for="n in 10"
+                      >
+                      {{n}}
+                    </v-btn>
                   </v-col>
                   <v-col cols="12" sm="9">
                     <v-row>
-                      <v-text-field v-model="editedItem.text" @keyup.enter="save" label="Descripción" autofocus></v-text-field>
+                      <v-text-field
+                        v-model="editedItem.text"
+                        @keyup.enter="save"
+                        label="Descripción"
+                        autofocus
+                      ></v-text-field>
                     </v-row>
                     <v-row>
                         <v-btn
                           class="mb-2 mr-2"
-                          :color="item.color"
-                          :key="index"
-                          outlined
-                          :value="item.name"
-                          v-for="(item, index) in activities"
                           @click="editedItem.act = item.name"
+                          :color="item.color"
+                          dark
+                          :key="index"
+                          :outlined="editedItem.act===item.name ? false : true"
+                          v-for="(item, index) in activities"
+                          :value="item.name"
                           >
                           <v-icon left>{{item.icon}}</v-icon>{{item.name}}
                         </v-btn>
@@ -80,6 +99,7 @@
 <script>
   import { mapMutations, mapState } from 'vuex'
   import { auth, db } from '../main'
+  import { cloneDeep } from "lodash"
   
   export default {
     name: 'Feelings',
@@ -94,19 +114,19 @@
         // },
         { text: 'Feel', value: 'feel', align: 'center'},
         { text: 'Descripción', value: 'text' },
-        { text: 'Act', value: 'act' },
+        { text: 'Actividad', value: 'act' },
         { text: 'Fecha', value: 'date' },
         { text: '', value: 'actions', sortable: false },
       ],
       editedIndex: -1,
       editedItem: {
-        feel: 9,
+        feel: 8,
         text: '',
         act: '',
         date: ''
       },
       defaultItem: {
-        feel: 9,
+        feel: 8,
         text: '',
         act: '',
         date: ''
@@ -118,19 +138,12 @@
         return this.editedIndex === -1 ? 'Agregar Feel' : 'Editar Feel'
       },
       arrayTable() {
-        if(this.array.length > 0) {
-
-          let temp = this.array.slice(0)
-          temp.reverse()
-        // temp.forEach((element, index) => {
-          //   let mes = ('0'+(element.date.getMonth()+1)).slice(-2)
-        //   let dia = ('0'+element.date.getDate()).slice(-2)
-        //   let hora = ('0'+element.date.getHours()).slice(-2)
-        //   let min = ('0'+element.date.getMinutes()).slice(-2)
-        //   temp[index].date = `${hora}:${min} ${dia}/${mes}`
-        // });
+        let temp = _.cloneDeep(this.array)
+        temp.reverse()
+        temp.forEach((element, index) => {
+          temp[index].date = this.formatDate(element.date)
+        });
           return temp
-        }
       }
     },
     watch: {
@@ -142,22 +155,22 @@
       ...mapMutations(['obtenerDatos', 'editarDato','eliminarDato']),
       crearDato() {
         let objeto = Object.assign({}, this.editedItem)
-      db.collection("eventos").add({
-        date: new Date(),
-        feel: objeto.feel,
-        text: objeto.text,
-        act: objeto.act,
-        userid: auth.currentUser.uid
-      })
-        .then(res => this.array.push({
-          docid: res.id,
+        db.collection("eventos").add({
           date: new Date(),
           feel: objeto.feel,
           text: objeto.text,
           act: objeto.act,
           userid: auth.currentUser.uid
-        }))
-        .catch(e => console.log("Error creando el feel: ", e.message))
+        })
+          .then(res => this.array.push({
+            docid: res.id,
+            date: new Date(),
+            feel: objeto.feel,
+            text: objeto.text,
+            act: objeto.act,
+            userid: auth.currentUser.uid
+          }))
+          .catch(e => console.log("Error creando el feel: ", e.message))
       },
       editItem (item) {
         this.editedIndex = this.array.indexOf(item)
@@ -189,6 +202,10 @@
         }
         this.close()
       },
+      formatDate(date) {
+        const options = { weekday: 'long', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit' };
+        return date.toLocaleString(undefined, options)
+      }
     }
   }
 </script>
