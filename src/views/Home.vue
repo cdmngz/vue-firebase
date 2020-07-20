@@ -124,7 +124,7 @@
     <!-- Chill Out -->
     <div class="section-2">
       <div class="caption">
-      <span class="border" style="background-color:transparent;font-size:25px;color: #f7f7f7;">Everything gonna be alraight</span>
+      <span class="border" style="background-color:transparent;font-size:25px;color: #f7f7f7;">Everything gonna be alright</span>
       </div>
     </div>
     <!-- Timeline -->
