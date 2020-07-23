@@ -15,11 +15,9 @@
             <v-btn color="primary" dark class="mx-2" v-on="on"><v-icon>mdi-plus</v-icon></v-btn>
           </template>
           <v-card>
-            <v-card-title>
-              <span class="headline">{{ formTitle }}</span>
-            </v-card-title>
-            <v-card-text>
-              <v-container>
+            <v-container>
+              <v-card-title class="text--secondary">{{ formTitle }}</v-card-title>
+              <v-card-text>
                 <v-row>
                   <v-col cols="12" sm="3">
                     <v-btn
@@ -62,14 +60,14 @@
                     </v-row>
                   </v-col>
                 </v-row>
-              </v-container>
-            </v-card-text>
+              </v-card-text>
 
-            <v-card-actions>
-              <v-spacer></v-spacer>
-              <v-btn color="blue darken-1" text @click="close">Cancelar</v-btn>
-              <v-btn color="blue darken-1" text @click="save">Enviar</v-btn>
-            </v-card-actions>
+              <v-card-actions>
+                <v-spacer></v-spacer>
+                <v-btn color="red darken-1" text @click="close">Cancelar</v-btn>
+                <v-btn color="success" text @click="save">Enviar</v-btn>
+              </v-card-actions>
+            </v-container>
           </v-card>
         </v-dialog>
       </v-toolbar>
@@ -173,12 +171,12 @@
           .catch(e => console.log("Error creando el feel: ", e.message))
       },
       editItem (item) {
-        this.editedIndex = this.array.indexOf(item)
+        this.editedIndex = this.arrayTable.indexOf(item)
         this.editedItem = Object.assign({}, item)
         this.dialog = true
       },
       deleteItem(item) {
-        const index = this.array.indexOf(item)
+        const index = this.arrayTable.indexOf(item)
         this.eliminarDato(item)
         this.array.splice(index, 1)
       },
@@ -191,13 +189,11 @@
       },
       save () {
         if (this.editedIndex > -1) {
-          console.log('editar')
-          this.array[this.editedIndex].feel = this.editedItem.feel
-          this.array[this.editedIndex].text = this.editedItem.text
-          this.array[this.editedIndex].act = this.editedItem.act
+          this.arrayTable[this.editedIndex].feel = this.editedItem.feel
+          this.arrayTable[this.editedIndex].text = this.editedItem.text
+          this.arrayTable[this.editedIndex].act = this.editedItem.act
           this.editarDato(this.editedItem)
         } else {
-          console.log('crear')
           this.crearDato()
         }
         this.close()
