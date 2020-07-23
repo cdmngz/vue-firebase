@@ -22,9 +22,9 @@
 
       <v-tabs v-if="usuario">
         <v-tabs-slider color="grey lighten-3"></v-tabs-slider>
-        <v-tab to="/dashboard">Dashboard</v-tab>
-        <v-tab to="/activities">Activities</v-tab>
-        <v-tab to="/feelings">Feelings</v-tab>
+        <v-tab to="/dashboard"><v-icon>mdi-home-analytics</v-icon></v-tab>
+        <v-tab to="/activities"><v-icon>mdi-run</v-icon></v-tab>
+        <v-tab to="/feelings"><v-icon>mdi-heart-box</v-icon></v-tab>
       </v-tabs>
       <v-spacer></v-spacer>
       <v-menu :offset-y="true">
