@@ -1,45 +1,68 @@
 <template>
-  <v-card class="pa-8" height="100%">
-    <v-card v-show="subirBajar!==0" class="my-5" v-for="(item, index) in subirBajar" :key="index">
-      <v-img src="https://picsum.photos/350/50" class="white--text align-end">
+  <div>
+    <v-card v-show="subirBajar!==0" class="mb-7" v-for="(item, index) in subirBajar" :key="index">
+      <v-img src="https://picsum.photos/720/60" class="white--text align-end">
         <v-card-title>{{title[index]}} {{nombreDias[numDiaHoy-restarDia[index]]}}</v-card-title>
       </v-img>
       <v-container>
-        <v-row>
-          <v-col><v-icon color="success">mdi-clock</v-icon>{{item.maxHour.toLocaleTimeString('es-AR', { hour: 'numeric', minute: 'numeric' })}}</v-col>
-          <v-col><v-icon color="success">mdi-arrow-up-bold-circle</v-icon>{{item.maxFeel}}</v-col>
-          <v-col><v-icon color="success">mdi-text-box</v-icon>{{item.maxDesc}}</v-col>
+        <v-row cols="12">
+          <v-col cols="2">
+            <v-icon small class="mr-1" color="success">mdi-clock</v-icon>
+            <span class="body-2">{{item.maxHour.toLocaleTimeString('es-ES', { hour: 'numeric', minute: 'numeric' })}}</span>
+          </v-col>
+          <v-col cols="2">
+            <v-icon small class="mr-1" color="success">mdi-arrow-up-bold-circle</v-icon>
+            <span class="body-2">{{item.maxFeel}}</span>
+          </v-col>
+          <v-col cols="4">
+            <v-icon small class="mr-1" color="success">mdi-text-box</v-icon>
+            <span class="body-2">{{item.maxDesc}}</span>
+          </v-col>
+          <v-col cols="4" class="d-flex justify-end">
+            <v-btn :color="item.maxAct.color" class="ma-1" outlined small>
+              <v-icon small left>{{item.maxAct.icon}}</v-icon>{{item.maxAct.name}}
+            </v-btn>
+          </v-col>
+        </v-row>
+        <v-row class="mt-n7 mb-n4">
+          <v-col cols="2"></v-col>
+          <v-col cols="2">
+            <v-icon small class="mr-1" color="primary">mdi-swap-vertical-circle</v-icon>
+            <span class="body-2">{{item.average}}</span> 
+            </v-col>
+          <v-col cols="4"></v-col>
+          <v-col cols="4"></v-col>
         </v-row>
         <v-row>
-          <v-col></v-col>
-          <v-col><v-icon color="primary">mdi-swap-vertical-circle</v-icon>{{item.average}}</v-col>
-          <v-col></v-col>
-        </v-row>
-        <v-row>
-          <v-col><v-icon color="red">mdi-clock</v-icon>{{item.minHour.toLocaleTimeString('es-AR', { hour: 'numeric', minute: 'numeric' })}}</v-col>
-          <v-col><v-icon color="red">mdi-arrow-down-bold-circle</v-icon>{{item.minFeel}}</v-col>
-          <v-col><v-icon color="red">mdi-text-box</v-icon>{{item.minDesc}}</v-col>
-        </v-row>
-        <v-row>            
-          <v-col>
+          <v-col cols="2">
+            <v-icon small class="mr-1" color="red">mdi-clock</v-icon>
+            <span class="body-2">{{item.minHour.toLocaleTimeString('es-AR', { hour: 'numeric', minute: 'numeric' })}}</span>
+          </v-col>
+          <v-col cols="2">
+            <v-icon small class="mr-1" color="red">mdi-arrow-down-bold-circle</v-icon>
+            <span class="body-2">{{item.minFeel}}</span>
+          </v-col>
+          <v-col cols="4">
+            <v-icon small class="mr-1" color="red">mdi-text-box</v-icon>
+            <span class="body-2">{{item.minDesc}}</span>
+            </v-col>
+          <v-col cols="4" class="d-flex justify-end">
             <v-btn
-              :color="item.color"
+              :color="item.minAct.color"
               class="ma-1"
-              :key="index"
               outlined
               small
-              v-for="(item, index) in item.act"
-            >
-              <v-icon left>{{item.icon}}</v-icon>{{item.name}}
+              >
+              <v-icon left>{{item.minAct.icon}}</v-icon>{{item.minAct.name}}
             </v-btn>
           </v-col>
         </v-row>
       </v-container>
     </v-card>
     <v-card v-if="subirBajar===0">
-      <v-card-text>Debes ingresar datos en la pestaña <v-btn to="/feelings" text depressed>Feelings</v-btn></v-card-text>
+      <v-card-text>Debes ingresar datos en la pestaña <v-btn to="/feelings" text depressed><v-icon color="primary">mdi-heart-box</v-icon></v-btn></v-card-text>
     </v-card>
-  </v-card>
+  </div>
 </template>
 
 <script>
@@ -88,37 +111,34 @@ export default {
     },
   },
   methods: {
+    obtenerFormatoBotones(nombre) {
+      return this.activities.find(element => element.name === nombre)
+    },
     rellenaArreglo(arreglo) {
-      let valorMax = {feel: 0}
-      let valorMin = {feel: 10}
-      let actividades = []
+      let valorMax = { feel: 0 }
+      let valorMin = { feel: 10 }
       let sum = 0
       
-      //Obtiene Max, min y actividades que no se repitan
+      //Obtiene Max y min
       arreglo.forEach(element => {
         element.feel > valorMax.feel ? valorMax = element : null;
         element.feel <= valorMin.feel ? valorMin = element : null;
-        actividades.includes(element.act) ? null : element.act!==undefined ? actividades.push(element.act) : null;
         sum += element.feel
       })
+
       //Obtiene promedio
-      sum = sum/arreglo.length
-      //Obtiene el formato de botones de activities
-      actividades.forEach((element, index) => {
-        this.activities.forEach(element2 => {
-          element2.name === element ? actividades[index] = element2 : null;
-        })
-      })
-            
+      sum = (sum / arreglo.length).toFixed();
+
       return {
         maxHour: valorMax.date,
         maxFeel: valorMax.feel,
         maxDesc: valorMax.text,
+        maxAct: this.obtenerFormatoBotones(valorMax.act),
         average: sum,
         minHour: valorMin.date,
         minFeel: valorMin.feel,
         minDesc: valorMin.text,
-        act: actividades
+        minAct: this.obtenerFormatoBotones(valorMin.act),
       }
     }
   }

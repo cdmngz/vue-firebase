@@ -152,29 +152,6 @@
       </v-timeline>
     </div>
 
-    <v-divider class="mx-16 my-16"></v-divider>
-    
-    <!-- Cards -->
-    <div>
-      <v-row class="mb-16">
-          <v-col
-            class="d-flex justify-space-around"
-            :key="index"
-            v-for="(item, index) in ultimoCards"
-            >
-            <v-lazy :options="{ threshold: 1.0 }" transition="vertical-fade">
-              <v-card class="text-center" width="300" flat>
-                <v-avatar class="my-4 rounded-circle" height="150" width="150">
-                  <img :src="item.img">
-                </v-avatar>
-                <v-card-title class="justify-center">{{item.title}}</v-card-title>
-                <v-card-text>{{item.text}}</v-card-text>
-              </v-card>
-            </v-lazy>
-        </v-col>
-      </v-row>
-    </div>
-
     <v-footer width="100vw" height="200" padless dark>
       <v-col
         class="text-center"
@@ -200,23 +177,6 @@ export default {
     eyeIcon: false,
     mail: 'invitado@gmail.com',
     password: '123456',
-    ultimoCards: [
-      {
-        img: require('@/assets/pug.gif'),
-        title: 'People',
-        text: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam.'
-      },
-      {
-        img: require('@/assets/giphy.webp'),
-        title: 'Loves',
-        text: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam.'
-      },
-      {
-        img: require('@/assets/like.gif'),
-        title: '3 items',
-        text: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam.'
-      }
-    ],
     eventos: [
       { 
         color: 'cyan',
@@ -235,16 +195,16 @@ export default {
         text: 'El desarrollo inicial se lleva a cabo con MongoAtlas y el hosting en GitHub, para mudar todo por completo a los servidores de Google con su servicio de Firebase, donde contamos con hosting, auth, base de datos y storage.'
       },
       { color: 'amber',
-        time: 'Junio',
+        time: "Junio '20",
         title: 'Llega el Verano',
         text: `Muchas personas haciendo ejercicio, una ciudad reactivada. Días con noches más cortas. Se van sumando una serie de gráficos para complementar lo atractivo en la app, y se desarrolla un borrador para Android.`
       },
-      // { color: 'orange',
-      //   time: 'CoVid-19',
-      //   title: 'Inicio de Cuarentena',
-      //   text: '....................'
-      // },
-      ],
+      { color: 'orange',
+        time: "Julio '20",
+        title: 'Calooooor',
+        text: 'Avances leves, un clima fuerte, ahora las noches son de aires cálidos y parte de la población paseándo por las costas de aguas turquesas.'
+      }
+    ],
   }),
   computed: {
     voltearText() {

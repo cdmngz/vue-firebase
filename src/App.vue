@@ -43,7 +43,7 @@
         </v-list>
       </v-menu>
     </v-app-bar>
-    <v-container class=" mt-12">
+    <v-container class="mt-7">
       <router-view></router-view>
     </v-container>
   </v-app>
