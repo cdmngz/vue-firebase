@@ -41,7 +41,6 @@
                         v-model="editedItem.text"
                         @keyup.enter="save"
                         label="Descripción"
-                        autofocus
                       ></v-text-field>
                     </v-row>
                     <v-row>

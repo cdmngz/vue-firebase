@@ -8,15 +8,15 @@
         <v-row cols="12">
           <v-col cols="2">
             <v-icon small class="mr-1" color="success">mdi-clock</v-icon>
-            <span class="body-2">{{item.maxHour.toLocaleTimeString('es-ES', { hour: 'numeric', minute: 'numeric' })}}</span>
+            <span>{{item.maxHour.toLocaleTimeString('es-ES', { hour: 'numeric', minute: 'numeric' })}}</span>
           </v-col>
           <v-col cols="2">
             <v-icon small class="mr-1" color="success">mdi-arrow-up-bold-circle</v-icon>
-            <span class="body-2">{{item.maxFeel}}</span>
+            <span>{{item.maxFeel}}</span>
           </v-col>
           <v-col cols="4">
             <v-icon small class="mr-1" color="success">mdi-text-box</v-icon>
-            <span class="body-2">{{item.maxDesc}}</span>
+            <span>{{item.maxDesc}}</span>
           </v-col>
           <v-col cols="4" class="d-flex justify-end">
             <v-btn :color="item.maxAct.color" class="ma-1" outlined small>
@@ -28,7 +28,7 @@
           <v-col cols="2"></v-col>
           <v-col cols="2">
             <v-icon small class="mr-1" color="primary">mdi-swap-vertical-circle</v-icon>
-            <span class="body-2">{{item.average}}</span> 
+            <span>{{item.average}}</span> 
             </v-col>
           <v-col cols="4"></v-col>
           <v-col cols="4"></v-col>
@@ -36,15 +36,15 @@
         <v-row>
           <v-col cols="2">
             <v-icon small class="mr-1" color="red">mdi-clock</v-icon>
-            <span class="body-2">{{item.minHour.toLocaleTimeString('es-AR', { hour: 'numeric', minute: 'numeric' })}}</span>
+            <span>{{item.minHour.toLocaleTimeString('es-AR', { hour: 'numeric', minute: 'numeric' })}}</span>
           </v-col>
           <v-col cols="2">
             <v-icon small class="mr-1" color="red">mdi-arrow-down-bold-circle</v-icon>
-            <span class="body-2">{{item.minFeel}}</span>
+            <span>{{item.minFeel}}</span>
           </v-col>
           <v-col cols="4">
             <v-icon small class="mr-1" color="red">mdi-text-box</v-icon>
-            <span class="body-2">{{item.minDesc}}</span>
+            <span>{{item.minDesc}}</span>
             </v-col>
           <v-col cols="4" class="d-flex justify-end">
             <v-btn
@@ -78,9 +78,9 @@ export default {
   computed: {
     ...mapState(['array', 'activities']),
     subirBajar() {
-      let uno = (d => new Date(d.setDate(d.getDate()-1)))(new Date).getDate()
-      let dos = (d => new Date(d.setDate(d.getDate()-2)))(new Date).getDate()
-      let tres = (d => new Date(d.setDate(d.getDate()-7)))(new Date).getDate()
+      const uno = (d => new Date(d.setDate(d.getDate()-1)))(new Date).toLocaleString('default', {dateStyle: 'short'})
+      const dos = (d => new Date(d.setDate(d.getDate()-2)))(new Date).toLocaleString('default', {dateStyle: 'short'})
+      const tres = (d => new Date(d.setDate(d.getDate()-7)))(new Date).toLocaleString('default', {dateStyle: 'short'})
       const ultimoItemArray = this.array[this.array.length-1]
       let temp1 = []
       let temp2 = []
@@ -91,10 +91,10 @@ export default {
       if(this.array.length > 0) {
         
         this.array.forEach(element => {
-          element.date.getDate() == uno ? temp1.push({ feel: element.feel, date: element.date, text: element.text, act: element.act}) : null;   
-          element.date.getDate() == dos ? temp2.push({ feel: element.feel, date: element.date, text: element.text, act: element.act}) : null;   
-          element.date.getDate() == tres ? temp3.push({ feel: element.feel, date: element.date, text: element.text, act: element.act}) : null;
-          element.date.getDate() == ultimoItemArray.date.getDate() ? temp4.push({ feel: element.feel, date: element.date, text: element.text, act: element.act}) : null;
+          element.date.toLocaleString('default', {dateStyle: 'short'}) === uno ? temp1.push({ feel: element.feel, date: element.date, text: element.text, act: element.act}) : null;   
+          element.date.toLocaleString('default', {dateStyle: 'short'}) === dos ? temp2.push({ feel: element.feel, date: element.date, text: element.text, act: element.act}) : null;   
+          element.date.toLocaleString('default', {dateStyle: 'short'}) === tres ? temp3.push({ feel: element.feel, date: element.date, text: element.text, act: element.act}) : null;
+          element.date.toLocaleString('default', {dateStyle: 'short'}) === ultimoItemArray.date.toLocaleString('default', {dateStyle: 'short'}) ? temp4.push({ feel: element.feel, date: element.date, text: element.text, act: element.act}) : null;
         })
 
         if(temp1.length > 0 && temp2.length > 0 && temp3.length > 0) {
