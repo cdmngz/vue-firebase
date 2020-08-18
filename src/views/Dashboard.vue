@@ -1,55 +1,45 @@
 <template>
   <v-container class="mt-12">
 
-    <v-layout row wrap>
+    <v-row>
 
-      <v-flex xs12 md7>
-        <v-layout>
-          <v-flex>
-            <v-container>
-              <Mensajes />
-            </v-container>
-          </v-flex>
-        </v-layout>
-
-        <v-layout>
-          <v-flex>
-            <v-container>
-              <Data />
-            </v-container>
-          </v-flex>
-        </v-layout>
-      </v-flex>
+      <v-col xs="12" md="7">
+        <v-row>
+          <v-col>
+            <Mensajes />
+          </v-col>
+        </v-row>
+        <v-row>
+          <v-col>
+            <Misiones />
+          </v-col>
+        </v-row>
+        <v-row>
+          <v-col>
+            <Data />
+          </v-col>
+        </v-row>
+      </v-col>
       
-      <v-flex xs12 md5>
-
-        <v-layout>
-          <v-flex>
-            <v-container>
-              <ChartHoy />
-            </v-container>
-          </v-flex>
-        </v-layout>
-        
-        <v-layout>
-          <v-flex>
-            <v-container>
-              <ChartMes />
-            </v-container>
-          </v-flex>
-        </v-layout>
-
-        <v-layout>
-          <v-flex>
-            <v-container>
-              <Calendar />
-            </v-container>
-          </v-flex>
-        </v-layout>
-
-      </v-flex>
+      <v-col xs="12" md="5">
+        <v-row>
+          <v-col>
+            <ChartHoy />
+          </v-col>
+        </v-row>
+        <v-row>
+          <v-col>
+            <ChartMes />
+          </v-col>
+        </v-row>
+        <v-row>
+          <v-col>
+            <Calendar />
+          </v-col>
+        </v-row>
+      </v-col>
     
-    </v-layout>
+    </v-row>
   </v-container>
 </template>
 
@@ -59,6 +49,7 @@ import ChartHoy from '@/components/ChartHoy'
 import ChartMes from '@/components/ChartMes'
 import Data from '@/components/Data'
 import Mensajes from '@/components/Mensajes'
+import Misiones from '@/components/Misiones'
 import { mapState } from 'vuex'
 
 export default {
@@ -68,7 +59,8 @@ export default {
     ChartHoy,
     ChartMes,
     Data,
-    Mensajes
+    Mensajes,
+    Misiones
   },
   computed: {
     ...mapState(['array'])

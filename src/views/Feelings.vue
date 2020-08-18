@@ -1,7 +1,7 @@
 <template>
-<v-container>
+  <v-container class="mt-12">
   <v-data-table
-    class="elevation-1 mt-12"
+    class="elevation-1"
     :headers="headers"
     :items="arrayTable"
     :sortDesc="true"

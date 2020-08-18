@@ -1,5 +1,5 @@
 <template>
-  <v-main>
+  <v-container class="mt-12">
     <v-btn
       class="ma-2"
       :color="item.color"
@@ -9,7 +9,7 @@
     >
       <v-icon left>{{item.icon}}</v-icon>{{item.name}}
     </v-btn>
-  </v-main>
+  </v-container>
 </template>
 
 <script>

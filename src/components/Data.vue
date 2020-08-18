@@ -47,13 +47,8 @@
             <span>{{item.minDesc}}</span>
             </v-col>
           <v-col cols="4" class="d-flex justify-end">
-            <v-btn
-              :color="item.minAct.color"
-              class="ma-1"
-              outlined
-              small
-              >
-              <v-icon left>{{item.minAct.icon}}</v-icon>{{item.minAct.name}}
+            <v-btn :color="item.minAct.color" class="ma-1" outlined small>
+              <v-icon small left>{{item.minAct.icon}}</v-icon>{{item.minAct.name}}
             </v-btn>
           </v-col>
         </v-row>
